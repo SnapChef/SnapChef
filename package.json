@@ -1,0 +1,34 @@
+{
+  "name": "snapchef",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1567.0",
+    "bcryptjs": "^2.4.3",
+    "express": "^4.18.2",
+    "framer-motion": "^11.0.3",
+    "fuse.js": "^7.0.0",
+    "mongodb": "^6.3.0",
+    "mongoose": "^8.1.1",
+    "next": "^14.0.3",
+    "next-auth": "^4.24.5",
+    "react": "^18",
+    "react-autosuggest": "^10.1.0",
+    "react-dom": "^18",
+    "react-icons": "^4.12.0",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.0.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.0.3",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0"
+  }
+}

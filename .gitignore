@@ -39,6 +39,6 @@ next-env.d.ts
 .github/
 snap_chef/
 
-#json windows
-package-lock.json
-package.json
+# #json windows
+# package-lock.json
+# package.json
