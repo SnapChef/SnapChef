@@ -52,7 +52,6 @@ export default function Profile({ profile }) {
               width: imageURL ? "100px" : "110px", // Change width based on imageURL presence
               height: imageURL ? "100px" : "110px", // Change height based on imageURL presence
               objectFit: "cover",
-              border: imageURL ? "2px solid black" : "",
             }}
             className="rounded-full"
           />

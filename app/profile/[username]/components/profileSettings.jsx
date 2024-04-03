@@ -131,7 +131,7 @@ export default function ProfileSettings({ setShowSettings, profileSettings }) {
         className="border-solid border-2 border-custom-main-dark rounded-lg backdrop-blur-md "
       >
         <div className="bg-custom-main-dark rounded-t-lg p-3">
-          <h1 className="text-black text-2xl font-bold">Edit Profile</h1>
+          <h1 className="text-white text-2xl font-bold">Edit Profile</h1>
         </div>
         <div className="bg-white rounded-b-lg p-4">
           <div className="flex flex-col">
@@ -159,7 +159,7 @@ export default function ProfileSettings({ setShowSettings, profileSettings }) {
                 </div>
               </div>
               <button
-                className="ml-12 bg-custom-main-dark bg-opacity-100 hover:bg-opacity-70 transition-colors ease-linear p-2 rounded-xl font-semibold"
+                className="ml-12 bg-custom-main-dark bg-opacity-100 text-white hover:bg-opacity-70 transition-colors ease-linear p-2 rounded-xl font-semibold"
                 onClick={() => document.getElementById("profilePic").click()}
               >
                 Change Photo
@@ -170,7 +170,7 @@ export default function ProfileSettings({ setShowSettings, profileSettings }) {
               maxLength="150"
               type="text"
               defaultValue={updatedBio}
-              className="border-solid border-2 border-custom-main-dark p-2 pb-16 rounded-lg mb-4"
+              className="border border-[#A2A2A2] p-2 pb-16 rounded-lg mb-4 focus:outline-none focus:border-custom-main-dark"
               onChange={(e) => setUpdatedBio(e.target.value)}
             />
           </div>
@@ -182,7 +182,7 @@ export default function ProfileSettings({ setShowSettings, profileSettings }) {
               Log Out
             </button>
             <button
-              className="bg-custom-main-dark bg-opacity-100 hover:bg-opacity-70 transition-colors ease-linear p-2 px-8 ml-60 mt-4 mb-2 rounded-xl font-semibold"
+              className="bg-custom-main-dark bg-opacity-100 hover:bg-opacity-70 text-white transition-colors ease-linear p-2 px-8 ml-60 mt-4 mb-2 rounded-xl font-semibold"
               onClick={handleConfirmClick}
             >
               Confirm

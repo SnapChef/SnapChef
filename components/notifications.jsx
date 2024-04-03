@@ -29,7 +29,7 @@ export default function Notifications({ setShowNotifications }) {
         <div className="bg-custom-main-dark rounded-t-lg p-3">
           {/* Orange background for top */}
           {/* Title */}
-          <h1 className="text-black text-xl font-bold">Notifications</h1>
+          <h1 className="text-white text-xl font-bold">Notifications</h1>
         </div>
         <div className="bg-white rounded-b-lg p-4">
           {" "}

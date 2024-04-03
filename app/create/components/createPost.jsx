@@ -130,7 +130,7 @@ export default function CreatePost() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="max-w-xl mx-auto p-6 shadow-md rounded-md my-26 border-4 border-black"
+      className="max-w-xl mx-auto p-6 shadow-md rounded-md my-26"
     >
       <h1 className="text-3xl font-semibold mb-4">Create New Post</h1>
 

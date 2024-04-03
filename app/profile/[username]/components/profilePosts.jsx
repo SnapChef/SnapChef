@@ -29,7 +29,7 @@ export default function ProfilePosts({ posts }) {
                 width: "200px",
                 height: "200px",
                 objectFit: "cover",
-                borderRadius: "10px",
+                borderRadius: 5,
               }} //remove border if wanting to remove black outline
             />
 
