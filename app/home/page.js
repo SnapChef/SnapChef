@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Post from "@/components/post";
 import SortFilterDropdown from "@/components/filterOptions";
 import NotFoundPage from "@/app/not-found";
+import Loader from "@/components/loader";
 
 export default function Home() {
   const [posts, setPosts] = useState([]); // Use state to store fetched recipes
@@ -33,10 +34,10 @@ export default function Home() {
       <div className="flex justify-end">
         <SortFilterDropdown />
       </div>
-      {isLoading && <p>Loading recipes...</p>}
+      {isLoading && <Loader />}
       {error && <p>Error: {error}</p>}
       {posts.length > 0 && (
-        <div className="m-10 grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="md:m-10 grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
           {posts.map((post) => (
             <Post key={post._id} post={post} />
           ))}
