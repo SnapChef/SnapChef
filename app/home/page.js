@@ -1,49 +1,46 @@
-"use client";
-import { useState, useEffect } from "react";
 import Post from "@/components/post";
 import SortFilterDropdown from "@/components/filterOptions";
 import NotFoundPage from "@/app/not-found";
-import Loader from "@/components/loader";
+import { connectMongoDB } from "@/lib/mongodb";
+import PostModel from "@/models/post";
+import User from "@/models/user";
 
-export default function Home() {
-  const [posts, setPosts] = useState([]); // Use state to store fetched recipes
-  const [isLoading, setIsLoading] = useState(true); // Track loading state
-  const [error, setError] = useState(null); // Store any errors during fetching
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("/api/homeRecipes"); // Adjust API endpoint
-        if (!response.ok) {
-          throw new Error(`Failed to fetch recipes: ${response.statusText}`);
+export async function FetchRecipes() {
+  try {
+    await connectMongoDB();
+    const posts = await PostModel.find().limit(8).lean();
+    const updatedPosts = await Promise.all(
+      posts.map(async (post) => {
+        const user = await User.findById(post.user_id).lean();
+        if (user) {
+          post.user_pfp = user.pfpUrl; // Add profile picture to post
         }
-        const data = await response.json();
-        setPosts(data.documents); // Update state with fetched recipes
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+        return post;
+      })
+    );
+    return updatedPosts;
+  } catch (error) {
+    console.error("Error fetching homepage recipes:", error);
+    return error;
+  }
+}
 
-    fetchData(); // Fetch data on component mount
-  }, []); // Empty dependency array ensures fetching only happens once
+export default async function Home() {
+  const posts = await FetchRecipes();
 
   return (
     <div>
       <div className="flex justify-end">
         <SortFilterDropdown />
       </div>
-      {isLoading && <Loader />}
-      {error && <p>Error: {error}</p>}
       {posts.length > 0 && (
         <div className="md:m-10 grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
           {posts.map((post) => (
-            <Post key={post._id} post={post} />
+            <Post key={post._id} post={JSON.parse(JSON.stringify(post))} />
           ))}
         </div>
       )}
-      {!posts.length && !isLoading && !error && <NotFoundPage />}
+      {!posts.length && <NotFoundPage />}
     </div>
   );
 }
