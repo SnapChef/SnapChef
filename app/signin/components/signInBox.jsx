@@ -7,6 +7,8 @@ import { RiLockPasswordLine } from "react-icons/ri";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { GoogleAuthProvider, signInWithPopup, getAuth } from "firebase/auth";
+import { app } from "../../../firebase.js"; 
 
 export default function SignInBox() {
   const [username, setUsername] = useState("");
@@ -37,6 +39,21 @@ export default function SignInBox() {
       }
 
       router.replace("/home");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleGoogleClick = async () => {
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: "select_account" });
+
+    try {
+      const result = await signInWithPopup(auth, provider);
+      var userEmail = result.user.email;
+      console.log(userEmail); 
+      router.replace("/home"); 
     } catch (error) {
       console.log(error);
     }
@@ -117,15 +134,13 @@ export default function SignInBox() {
                 Sign In
               </button>
               {/* removed Google sign-in for now */}
-              {/* <p className="text-gray-400 my-4"> or </p>
-              <div className="flex justify-center">
-                <a
-                  href="#"
-                  className="border-2 border-gray-400 rounded-full p-4 mx-1 transition-colors ease-linear hover:bg-custom-main-dark hover:text-white"
-                >
-                  <FaGoogle className="text-sm" />
-                </a>
-              </div> */}
+              <p className="text-gray-400 my-4"> or </p>
+              <button
+              onClick={handleGoogleClick}
+              className="border-2 border-gray-400 rounded-full p-4 mx-1 transition-colors ease-linear hover:bg-custom-main-dark hover:text-white"
+            >
+              <FaGoogle className="text-sm" />
+</button>
             </form>
           </div>
           {/* END OF: Sign In Section */}

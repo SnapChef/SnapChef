@@ -28,6 +28,7 @@ export default function SignUpBox() {
       setError("Password must be at least 6 characters long and contain at least one uppercase letter.");
       return;
     }
+    
     try {
       //checking user existence
       const resUserExists = await fetch("api/userExists", {
