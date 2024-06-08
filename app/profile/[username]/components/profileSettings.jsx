@@ -1,3 +1,4 @@
+"use client";
 import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { signOut } from "next-auth/react";
@@ -5,7 +6,7 @@ import Image from "next/image";
 import defaultPfp from "../../../../assets/icons/profile.svg";
 
 export default function ProfileSettings({ setShowSettings, profileSettings }) {
-  const { id, userName, bio, profilePic } = profileSettings;
+  const { id, username, bio, pfpUrl } = profileSettings;
   const [updatedBio, setUpdatedBio] = useState(bio);
 
   const [file, setFile] = useState(null);
@@ -40,9 +41,9 @@ export default function ProfileSettings({ setShowSettings, profileSettings }) {
 
       if (file) {
         // Check if pre-signed URL already given
-        if (profilePic) {
+        if (pfpUrl) {
           // Get existing object key from URL
-          const parts = profilePic.split("/");
+          const parts = pfpUrl.split("/");
 
           // Extract the date part (2024-03-17)
           const datePart = parts[parts.length - 2];
@@ -138,9 +139,9 @@ export default function ProfileSettings({ setShowSettings, profileSettings }) {
             <div className="flex justify-between items-center bg-orange-100 p-2 rounded-lg my-4">
               <div className="flex justify-center items-center">
                 {/* Allow user to click on profile pic to select a new image */}
-                <label htmlFor="profilePic" className="cursor-pointer">
+                <label htmlFor="pfpUrl" className="cursor-pointer">
                   <Image
-                    src={previewUrl || profilePic || defaultPfp}
+                    src={previewUrl || pfpUrl || defaultPfp}
                     alt="Profile Picture"
                     className="rounded-full w-16 h-16"
                     width={100}
@@ -149,18 +150,18 @@ export default function ProfileSettings({ setShowSettings, profileSettings }) {
                 </label>
                 <input
                   type="file"
-                  id="profilePic"
+                  id="pfpUrl"
                   accept="image/*"
                   className="hidden"
                   onChange={handleFileChange}
                 />
                 <div className="mx-3 px-1 font-bold text-xl border-solid border border-[#A3A3A3] rounded-xl">
-                  {userName}
+                  {username}
                 </div>
               </div>
               <button
                 className="ml-12 bg-custom-main-dark bg-opacity-100 text-white hover:bg-opacity-70 transition-colors ease-linear p-2 rounded-xl font-semibold"
-                onClick={() => document.getElementById("profilePic").click()}
+                onClick={() => document.getElementById("pfpUrl").click()}
               >
                 Change Photo
               </button>
@@ -193,60 +194,3 @@ export default function ProfileSettings({ setShowSettings, profileSettings }) {
     </div>
   );
 }
-
-// const [statusMessage, setStatusMessage] = useState("");
-// const [loading, setLoading] = useState(false);
-// const handleSubmit = async (e) => {
-//   e.preventDefault();
-//   setLoading(true);
-//   try {
-//     let fileId = undefined;
-//     if (file) {
-//       setStatusMessage("Uploading...");
-//       fileId = await handleFileUpload(file);
-//     }
-
-//     setStatusMessage("Updating profile...");
-
-//    // update bio here is needed
-//
-//     setStatusMessage("Update Successful");
-//   } catch (error) {
-//     console.error(error);
-//     setStatusMessage("Post failed");
-//   } finally {
-//     setLoading(false);
-//   }
-// };
-
-// const computeSHA256 = async (file) => {
-//   const buffer = await file.arrayBuffer();
-//   const hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
-//   const hashArray = Array.from(new Uint8Array(hashBuffer));
-//   const hashHex = hashArray
-//     .map((b) => b.toString(16).padStart(2, "0"))
-//     .join("");
-//   return hashHex;
-// };
-
-// const handleImageUpload = async (file) => {
-//   const signedURLResult = await getSignedURL({
-//     fileSize: file.size,
-//     fileType: file.type,
-//     checksum: await computeSHA256(file),
-//   });
-//   if (signedURLResult.failure !== undefined) {
-//     throw new Error(signedURLResult.failure);
-//   }
-//   const { url, id: fileId } = signedURLResult.success;
-//   await fetch(url, {
-//     method: "PUT",
-//     headers: {
-//       "Content-Type": file.type,
-//     },
-//     body: file,
-//   });
-
-//   // const fileUrl = url.split("?")[0];
-//   return fileId;
-// };

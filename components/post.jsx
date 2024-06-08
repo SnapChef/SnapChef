@@ -1,10 +1,7 @@
-"use client";
-
 import { FaFireFlameCurved } from "react-icons/fa6";
 import { IoIosTimer } from "react-icons/io";
 import { FaUserCircle } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
-import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -26,12 +23,7 @@ export default function Post({ post }) {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: -50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 1, ease: "easeOut" }}
-      className="bg-orange-100 p-7 rounded-xl flex items-center justify-center mx-auto max-w-[400px] transition-all ease-linear border-opacity-0 border-custom-main-dark hover:border-opacity-50 border-2"
-    >
+    <div className="bg-orange-100 p-7 rounded-xl flex items-center justify-center mx-auto max-w-[400px] transition-all ease-linear border-opacity-0 border-custom-main-dark hover:border-opacity-50 border-2">
       {/* Display the square image if imageURL is provided */}
       {recipe_image && (
         <div>
@@ -102,6 +94,6 @@ export default function Post({ post }) {
           </Link>
         </div>
       )}
-    </motion.div>
+    </div>
   );
 }

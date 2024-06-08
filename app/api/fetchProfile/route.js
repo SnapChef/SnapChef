@@ -3,10 +3,10 @@ import User from "@/models/user";
 import Post from "@/models/post";
 import { NextResponse } from "next/server";
 
-export async function GET(req) {
+export async function POST(req) {
   try {
-    const searchParams = req.nextUrl.searchParams;
-    const username = searchParams.get("username");
+    const { username } = await req.json();
+    console.log(username);
 
     if (!username) {
       return NextResponse.json(
@@ -59,7 +59,7 @@ export async function GET(req) {
       posts, // Return the found posts
     });
   } catch (error) {
-    console.error("Error fetching user and posts fetchProfile:", error);
+    console.error("Error fetching user and posts fetchProfile22222:", error);
     return NextResponse.json(
       { message: "Internal server error" },
       { status: 500 }

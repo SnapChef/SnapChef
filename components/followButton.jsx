@@ -4,7 +4,7 @@ import SignInModal from "../app/signin/components/signInModal";
 import { motion } from "framer-motion";
 
 export default function FollowButton({ targetId }) {
-  const [isFollowing, setIsFollowing] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
   const { data: session } = useSession();
@@ -13,7 +13,7 @@ export default function FollowButton({ targetId }) {
     const fetchFollowing = async () => {
       if (session) {
         try {
-          const userData = await fetch(`/api/fetchProfile/2`, {
+          const userData = await fetch(`/api/fetchProfile`, {
             method: "POST",
             body: JSON.stringify({ username: session.user.name }),
           });
@@ -57,6 +57,9 @@ export default function FollowButton({ targetId }) {
       console.error("Error updating like count:", error);
     }
   };
+  if (isFollowing === null) {
+    return null;
+  }
 
   return (
     <div className="flex-row items-center justify-center">

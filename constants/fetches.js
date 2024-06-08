@@ -1,25 +1,38 @@
 import { connectMongoDB } from "@/lib/mongodb";
-import User from "@/models/user";
 import Post from "@/models/post";
-import { NextResponse } from "next/server";
+import User from "@/models/user";
 
-export async function POST(req) {
+export async function fetchHomeRecipes() {
   try {
-    const { username } = await req.json();
-    console.log(username);
+    await connectMongoDB();
+    const posts = await Post.find().limit(20).lean();
+    const updatedPosts = await Promise.all(
+      posts.map(async (post) => {
+        const user = await User.findById(post.user_id).lean();
+        if (user) {
+          post.user_pfp = user.pfpUrl; // Add profile picture to post
+        }
+        return post;
+      })
+    );
+    return updatedPosts;
+  } catch (error) {
+    console.error("Error fetching homepage recipes:", error);
+    return error;
+  }
+}
 
+export async function fetchProfile(username) {
+  try {
     if (!username) {
-      return NextResponse.json(
-        { message: "Username is required" },
-        { status: 400 }
-      );
+      return { message: "Username is required" };
     }
 
     await connectMongoDB();
     const user = await User.findOne({ name: username });
 
     if (!user) {
-      return NextResponse.json({ message: "User not found" }, { status: 404 });
+      return { message: "User not found" };
     }
 
     // Extract user info
@@ -43,7 +56,7 @@ export async function POST(req) {
     const posts = await Post.find({ _id: { $in: postIds } });
 
     // Return user info along with their posts
-    return NextResponse.json({
+    return {
       user: {
         id: _id,
         username: name,
@@ -57,12 +70,12 @@ export async function POST(req) {
         following,
       },
       posts, // Return the found posts
-    });
+    };
   } catch (error) {
-    console.error("Error fetching user and posts fetchProfile22222:", error);
-    return NextResponse.json(
-      { message: "Internal server error" },
-      { status: 500 }
-    );
+    console.error("Error fetching user and posts fetchProfile:", error);
+    return;
+    {
+      message: "Internal server error";
+    }
   }
 }
