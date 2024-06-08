@@ -23,7 +23,11 @@ export default function SignUpBox() {
       setError("All fields are necessary.");
       return;
     }
-
+    const passwordReg = /^(?=.*[A-Z]).{6,}$/;
+    if (!passwordReg.test(password)) {
+      setError("Password must be at least 6 characters long and contain at least one uppercase letter.");
+      return;
+    }
     try {
       //checking user existence
       const resUserExists = await fetch("api/userExists", {
