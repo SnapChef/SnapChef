@@ -14,7 +14,7 @@ export default function CommentSection({ commentData }) {
   }, [commentData]);
 
   return (
-    <div className="max-w-4xl mx-auto p-6 shadow-md rounded-md my-6 border-4 border-[#575A65]">
+    <div className="max-w-4xl mx-auto p-6 shadow-md rounded-md my-6">
       <div className="max-h-80 overflow-y-auto" style={{ maxHeight: "400px" }}>
         {comments.length === 0 ? (
           <>

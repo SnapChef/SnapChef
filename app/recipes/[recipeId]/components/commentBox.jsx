@@ -59,7 +59,7 @@ export default function CommentBox({ recipeId }) {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 shadow-md rounded-md my-6 border-4 border-[#575A65]">
+    <div className="max-w-4xl mx-auto p-6 shadow-md rounded-md my-6">
       <form onSubmit={handleSubmit} className="mb-4">
         <textarea
           name="text"
@@ -68,7 +68,7 @@ export default function CommentBox({ recipeId }) {
           onChange={handleInputChange}
           placeholder="Write your comment here..."
           rows={3}
-          className="border border-gray-300 p-2 rounded-md w-full focus:outline-none focus:border-custom-main-dark"
+          className="p-2 rounded-md w-full focus:outline-none focus:border-custom-main-dark border"
           required
         />
         <button
