@@ -6,7 +6,7 @@ import SignInModal from "../app/signin/components/signInModal";
 import { motion } from "framer-motion";
 
 export default function Favorites({ recipeId }) {
-  const [isFavorited, setIsFavorited] = useState(null);
+  const [isFavorited, setIsFavorited] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
 
