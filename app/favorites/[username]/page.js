@@ -1,9 +1,14 @@
 import Post from "@/components/post";
 import { fetchFavRecipes } from "@/constants/fetches";
+import NotFoundPage from "@/app/not-found";
 
 export default async function Favorites({ params }) {
   const { username } = params;
   const data = await fetchFavRecipes(username);
+
+  if (!data || data.error || data.message) {
+    return <NotFoundPage />;
+  }
 
   return (
     <div className="h-screen">

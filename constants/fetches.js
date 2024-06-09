@@ -136,17 +136,14 @@ export async function fetchComments(recipeId) {
 export async function fetchFavRecipes(username) {
   try {
     if (!username) {
-      return NextResponse.json(
-        { message: "Username is required" },
-        { status: 400 }
-      );
+      return { message: "Username is required" };
     }
 
     await connectMongoDB();
     const user = await User.findOne({ name: username });
 
     if (!user) {
-      return NextResponse.json({ message: "User not found" }, { status: 404 });
+      return { message: "User not found" };
     }
 
     // get favorited posts IDs from the user's document
