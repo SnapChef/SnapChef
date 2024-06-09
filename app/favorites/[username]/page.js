@@ -11,7 +11,7 @@ export default async function Favorites({ params }) {
   }
 
   return (
-    <div className="h-screen">
+    <div>
       <h1 className="flex flex-col items-center justify-center text-4xl text-custom-main-dark font-sand font-semibold">
         Saved Recipes
       </h1>

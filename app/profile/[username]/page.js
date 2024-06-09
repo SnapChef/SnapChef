@@ -13,7 +13,7 @@ export default async function ProfilePage({ params }) {
   }
 
   return (
-    <div className="h-[85vh]">
+    <div>
       <Profile profile={profile} />
       {profile?.user?.postCount > 0 ? (
         <div className="grid gap-10 my-10 ml-96 mr-28 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
