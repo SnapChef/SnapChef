@@ -4,8 +4,7 @@ import NotFoundPage from "@/app/not-found";
 import { fetchHomeRecipes } from "@/constants/fetches";
 
 export default async function Home() {
-  const postsData = await fetchHomeRecipes();
-  const posts = JSON.parse(JSON.stringify(postsData));
+  const posts = await fetchHomeRecipes();
 
   if (!posts) {
     return <NotFoundPage />;

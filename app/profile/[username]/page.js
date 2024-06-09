@@ -6,8 +6,7 @@ import { fetchProfile } from "@/constants/fetches";
 
 export default async function ProfilePage({ params }) {
   const { username } = params;
-  const profileData = await fetchProfile(username);
-  const profile = JSON.parse(JSON.stringify(profileData));
+  const profile = await fetchProfile(username);
 
   if (!profile) {
     return <NotFoundPage />;

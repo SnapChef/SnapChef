@@ -29,6 +29,10 @@ export async function GET(req) {
     const query = { _id: { $in: postIds } };
     const documents = await Post.find(query);
 
+    documents.forEach((post) => {
+      post.recipe_likes = post.liked_user_ids.length;
+    });
+
     // return favorited posts information
     return NextResponse.json({ documents: documents });
   } catch (error) {

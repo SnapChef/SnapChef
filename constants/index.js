@@ -1,24 +1,24 @@
-export async function fetchRecipe(recipeId) {
-  try {
-    const response = await fetch(
-      `${process.env.URL}/api/fetchRecipe?id=${recipeId}`,
-      {
-        next: {
-          revalidate: 0, // use 0 to opt out of using cache
-        },
-      }
-    );
+// export async function fetchRecipe(recipeId) {
+//   try {
+//     const response = await fetch(
+//       `${process.env.URL}/api/fetchRecipe?id=${recipeId}`,
+//       {
+//         next: {
+//           revalidate: 0, // use 0 to opt out of using cache
+//         },
+//       }
+//     );
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch recipe");
-    }
+//     if (!response.ok) {
+//       throw new Error("Failed to fetch recipe");
+//     }
 
-    return response.json();
-  } catch (error) {
-    console.error("Error fetching recipe:", error.message);
-    return null; // Return null in case of error
-  }
-}
+//     return response.json();
+//   } catch (error) {
+//     console.error("Error fetching recipe:", error.message);
+//     return null; // Return null in case of error
+//   }
+// }
 
 export async function fetchSearchTerm(term) {
   try {
@@ -108,27 +108,27 @@ export async function fetchFavRecipes(username) {
   }
 }
 
-export async function fetchComments(recipeId) {
-  try {
-    const response = await fetch(
-      `${process.env.URL}/api/fetchComments?recipe_id=${recipeId}`,
-      {
-        next: {
-          revalidate: 0, // use 0 to opt out of using cache
-        },
-      }
-    );
+// export async function fetchComments(recipeId) {
+//   try {
+//     const response = await fetch(
+//       `${process.env.URL}/api/fetchComments?recipe_id=${recipeId}`,
+//       {
+//         next: {
+//           revalidate: 0, // use 0 to opt out of using cache
+//         },
+//       }
+//     );
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch recipe");
-    }
+//     if (!response.ok) {
+//       throw new Error("Failed to fetch recipe");
+//     }
 
-    return response.json();
-  } catch (error) {
-    console.error("Error fetching recipe:", error.message);
-    return null; // Return null in case of error
-  }
-}
+//     return response.json();
+//   } catch (error) {
+//     console.error("Error fetching recipe:", error.message);
+//     return null; // Return null in case of error
+//   }
+// }
 
 export async function getHomePageRecipes() {
   const res = await fetch(`${process.env.URL}/api/homeRecipes`, {

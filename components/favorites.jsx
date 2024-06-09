@@ -6,7 +6,7 @@ import SignInModal from "../app/signin/components/signInModal";
 import { motion } from "framer-motion";
 
 export default function Favorites({ recipeId }) {
-  const [isFavorited, setIsFavorited] = useState(false);
+  const [isFavorited, setIsFavorited] = useState(null);
   const [showMessage, setShowMessage] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
 
@@ -16,7 +16,7 @@ export default function Favorites({ recipeId }) {
     const fetchFavoritedPosts = async () => {
       if (session) {
         try {
-          const userData = await fetch(`/api/fetchProfile/2`, {
+          const userData = await fetch(`/api/fetchProfile`, {
             method: "POST",
             body: JSON.stringify({ username: session.user.name }),
           });
@@ -59,6 +59,10 @@ export default function Favorites({ recipeId }) {
       console.error("Error updating favorites:", error);
     }
   };
+
+  if (isFavorited === null) {
+    return null;
+  }
 
   return (
     <div className="flex-row items-center justify-center">

@@ -4,21 +4,21 @@ import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import SignInModal from "../app/signin/components/signInModal";
-import { fetchProfile } from "@/constants";
 import { motion } from "framer-motion";
 
 export default function Likes({ likeCount, recipeId }) {
-  const [isLiked, setIsLiked] = useState(false);
+  const [isLiked, setIsLiked] = useState(null);
   const [updatedLikeCount, setUpdatedLikeCount] = useState(likeCount);
   const [showModal, setShowModal] = useState(false);
 
   const { data: session } = useSession();
 
   useEffect(() => {
+    // See if the user has liked the post
     const fetchLikedPosts = async () => {
       if (session) {
         try {
-          const userData = await fetch(`/api/fetchProfile/2`, {
+          const userData = await fetch(`/api/fetchProfile`, {
             method: "POST",
             body: JSON.stringify({ username: session.user.name }),
           });
@@ -31,7 +31,7 @@ export default function Likes({ likeCount, recipeId }) {
     };
 
     fetchLikedPosts();
-  }, [session]);
+  }, [session, recipeId]);
 
   const handleLikeClick = async () => {
     if (!session) {
@@ -63,11 +63,13 @@ export default function Likes({ likeCount, recipeId }) {
     }
   };
 
+  if (isLiked === null) return null;
+
   return (
     <div className="flex-row items-center justify-center">
       {isLiked ? (
         <FaHeart
-          className="text-custom-main-dark text-2xl hover:cursor-pointer"
+          className="text-custom-main-dark text-2xl hover:cursor-pointer hover:fill-custom-main-dark"
           onClick={handleLikeClick}
         />
       ) : (

@@ -20,7 +20,7 @@ export default function AttributeList({ attributes, time, cals }) {
       text: "Gluten Free",
     },
   };
-  
+
   return (
     <div>
       <div className="flex items-center">
@@ -33,9 +33,14 @@ export default function AttributeList({ attributes, time, cals }) {
           <p className="font-sans text-xs mt-1 text-gray-500">{cals} cals</p>
         </div>
         {attributes.map((attribute, index) => (
-          <div key={index} className="flex flex-col items-center justify-center ml-6">
+          <div
+            key={index}
+            className="flex flex-col items-center justify-center ml-6"
+          >
             {attributeData[attribute].icon}
-            <p className="font-sans text-xs mt-1 text-gray-500">{attributeData[attribute].text}</p>
+            <p className="font-sans text-xs mt-1 text-gray-500">
+              {attributeData[attribute].text}
+            </p>
           </div>
         ))}
       </div>

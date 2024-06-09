@@ -6,7 +6,6 @@ import { NextResponse } from "next/server";
 export async function POST(req) {
   try {
     const { username } = await req.json();
-    console.log(username);
 
     if (!username) {
       return NextResponse.json(
@@ -23,7 +22,7 @@ export async function POST(req) {
     }
 
     // Extract user info
-    const {
+    let {
       _id,
       name,
       bio,
@@ -42,6 +41,15 @@ export async function POST(req) {
     // Use the post IDs to find the corresponding posts
     const posts = await Post.find({ _id: { $in: postIds } });
 
+    // Update the recipe_likes to be liked_user_ids.length
+    posts.forEach((post) => {
+      post.recipe_likes = post.liked_user_ids.length;
+    });
+
+    // Update the followerCount to be followers.length
+    followerCount = user.followers.length;
+    followingCount = user.following.length;
+
     // Return user info along with their posts
     return NextResponse.json({
       user: {
@@ -59,7 +67,7 @@ export async function POST(req) {
       posts, // Return the found posts
     });
   } catch (error) {
-    console.error("Error fetching user and posts fetchProfile22222:", error);
+    console.error("Error fetching user and posts:", error);
     return NextResponse.json(
       { message: "Internal server error" },
       { status: 500 }
