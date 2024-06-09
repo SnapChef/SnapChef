@@ -7,7 +7,7 @@ import SignInModal from "../app/signin/components/signInModal";
 import { motion } from "framer-motion";
 
 export default function Likes({ likeCount, recipeId }) {
-  const [isLiked, setIsLiked] = useState(null);
+  const [isLiked, setIsLiked] = useState(false);
   const [updatedLikeCount, setUpdatedLikeCount] = useState(likeCount);
   const [showModal, setShowModal] = useState(false);
 
