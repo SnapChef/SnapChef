@@ -1,5 +1,5 @@
 import Post from "@/components/post";
-import { fetchFavRecipes } from "@/constants/fetches";
+import { fetchFavRecipes } from "@/actions/fetches";
 import NotFoundPage from "@/app/not-found";
 
 export default async function Favorites({ params }) {

@@ -1,5 +1,5 @@
 import Comment from "./comment";
-import { fetchComments } from "@/constants/fetches.js";
+import { fetchComments } from "@/actions/fetches.js";
 
 export default async function CommentSection({ recipeId }) {
   let comments = [];

@@ -1,5 +1,5 @@
 import Post from "@/components/post";
-import { fetchFilteredList } from "@/constants/fetches";
+import { fetchFilteredList } from "@/actions/fetches";
 import SortFilterDropdown from "@/components/filterOptions";
 import NotFoundPage from "@/app/not-found";
 

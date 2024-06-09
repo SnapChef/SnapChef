@@ -1,3 +1,5 @@
+"use server";
+
 import { connectMongoDB } from "@/lib/mongodb";
 import Post from "@/models/post";
 import User from "@/models/user";
@@ -32,25 +34,15 @@ export async function fetchProfile(username) {
     }
 
     await connectMongoDB();
-    const user = await User.findOne({ name: username });
+    const user = await User.findOne({ name: username }).select("-password");
 
     if (!user) {
       return { error: "User not found" };
     }
 
     // Extract user info
-    let {
-      _id,
-      name,
-      bio,
-      followerCount,
-      followingCount,
-      postCount,
-      likedPosts,
-      favoritedPosts,
-      pfpUrl,
-      following,
-    } = user;
+    const { _id, name, bio, likedPosts, favoritedPosts, pfpUrl, following } =
+      user;
 
     // Get the post IDs from the user's document
     const postIds = user.posts;
@@ -59,13 +51,14 @@ export async function fetchProfile(username) {
     const posts = await Post.find({ _id: { $in: postIds } });
 
     // Update the recipe_likes to be liked_user_ids.length
-    posts.forEach((post) => {
-      post.recipe_likes = post.liked_user_ids.length;
+    const postsWithLikes = posts.map((post) => {
+      return {
+        ...post.toObject(), // Convert mongoose document to plain JS object
+        recipe_likes: post.liked_user_ids.length,
+      };
     });
 
-    // Update the followerCount to be followers.length
-    followerCount = user.followers.length;
-    followingCount = user.following.length;
+    // console.log("posts", posts[0]);
 
     // Return user info along with their posts
     return JSON.parse(
@@ -74,15 +67,15 @@ export async function fetchProfile(username) {
           id: _id,
           username: name,
           bio,
-          followerCount,
-          followingCount,
-          postCount,
+          followerCount: user.followers.length,
+          followingCount: user.following.length,
+          postCount: postIds.length,
           likedPosts,
           favoritedPosts,
           pfpUrl,
           following,
         },
-        posts, // Return the found posts
+        posts: postsWithLikes, // Return the found posts
       })
     );
   } catch (error) {

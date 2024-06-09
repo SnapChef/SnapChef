@@ -18,7 +18,7 @@ import Profile from "../assets/icons/profile.svg";
 import ProfileFill from "../assets/icons/profileFill.svg";
 import Autosuggest from "react-autosuggest";
 import Fuse from "fuse.js";
-import { fetchRecipeNames } from "@/constants";
+import { fetchRecipeNames } from "@/actions";
 import Notifications from "./notifications";
 
 const fuseSettings = {

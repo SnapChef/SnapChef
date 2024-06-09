@@ -1,7 +1,7 @@
 import Post from "@/components/post";
 import SortFilterDropdown from "@/components/filterOptions";
 import NotFoundPage from "@/app/not-found";
-import { fetchHomeRecipes } from "@/constants/fetches";
+import { fetchHomeRecipes } from "@/actions/fetches";
 
 export default async function Home() {
   const posts = await fetchHomeRecipes();
