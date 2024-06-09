@@ -1,7 +1,7 @@
 "use client";
 import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import defaultPfp from "../../../../assets/icons/profile.svg";
 
@@ -13,6 +13,7 @@ export default function ProfileSettings({ setShowSettings, profileSettings }) {
   const [previewUrl, setPreviewUrl] = useState(null);
 
   const settingsRef = useRef();
+  const { data: session } = useSession();
 
   const handleClickOutside = (event) => {
     if (settingsRef.current && !settingsRef.current.contains(event.target)) {
@@ -118,7 +119,35 @@ export default function ProfileSettings({ setShowSettings, profileSettings }) {
       console.error("Error updating user information:", error);
     }
   };
+  const handleDeleteProfile = async (useSession) => {
+    const confirmDelete = confirm(
+      "Are you sure you want to delete your profile? This action cannot be undone."
+    );
+    if (!confirmDelete) return;
 
+    try {
+      const res = await fetch("/api/deleteUser", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.accessToken}`, // Pass the session token
+        },
+        body: JSON.stringify({ userId: id }),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        alert("Failed to delete profile: " + errorData.message);
+      } else {
+        const data = await res.json();
+        alert(data.message);
+        signOut(); // Sign out the user after deletion
+      }
+    } catch (error) {
+      console.error("Failed to delete profile:", error);
+      alert("Failed to delete profile. Please try again later.");
+    }
+  };
   return (
     <div
       className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-40 m-auto max-w-10"
@@ -187,6 +216,12 @@ export default function ProfileSettings({ setShowSettings, profileSettings }) {
               onClick={handleConfirmClick}
             >
               Confirm
+            </button>
+            <button
+              className="bg-opacity-100 hover:bg-opacity-70 bg-red-500 text-white transition-colors ease-linear p-2 px-5 ml-5 mt-4 mb-2 rounded-xl font-semibold"
+              onClick={handleDeleteProfile}
+            >
+              Delete Profile
             </button>
           </div>
         </div>

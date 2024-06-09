@@ -8,7 +8,7 @@ export default async function ProfilePage({ params }) {
   const { username } = params;
   const profile = await fetchProfile(username);
 
-  if (!profile) {
+  if (!profile || profile == null || profile == undefined || profile.error) {
     return <NotFoundPage />;
   }
 
