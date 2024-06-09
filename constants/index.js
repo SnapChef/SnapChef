@@ -41,25 +41,3 @@ export async function fetchRecipeNames(searchTerm) {
     return null; // Return null in case of error
   }
 }
-
-export async function fetchFilteredList(option) {
-  try {
-    const response = await fetch(
-      `${process.env.URL}/api/fetchFilteredList?option=${option}`,
-      {
-        next: {
-          revalidate: 0, // use 0 to opt out of using cache
-        },
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch recipe names");
-    }
-
-    return response.json();
-  } catch (error) {
-    console.error("Error fetching recipe names:", error.message);
-    return null; // Return null in case of error
-  }
-}

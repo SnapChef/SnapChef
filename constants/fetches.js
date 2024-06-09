@@ -12,8 +12,8 @@ export async function fetchHomeRecipes() {
       posts.map(async (post) => {
         const user = await User.findById(post.user_id).lean();
         if (user) {
-          post.user_pfp = user.pfpUrl;
-          post.recipe_likes = post.liked_user_ids.length; // Add profile picture to post
+          post.user_pfp = user.pfpUrl; // Add profile picture to post
+          post.recipe_likes = post.liked_user_ids.length;
         }
         return post;
       })
@@ -161,6 +161,36 @@ export async function fetchFavRecipes(username) {
     return { documents: documents };
   } catch (error) {
     console.error("Error fetching user and posts fetch fav:", error);
+    return { error: "Internal server error" };
+  }
+}
+
+export async function fetchFilteredList(option) {
+  try {
+    await connectMongoDB();
+
+    let query;
+    if (
+      option === "highProtein" ||
+      option === "vegan" ||
+      option === "glutenFree"
+    ) {
+      query = { recipe_attributes: option };
+    } else {
+      return { message: "Filter option not available!" };
+    }
+
+    const documents = await Post.find(query);
+    documents.forEach((post) => {
+      post.recipe_likes = post.liked_user_ids.length;
+    });
+
+    if (!documents || documents.length === 0)
+      return { message: "No recipe(s) found!" };
+
+    return { documents: documents };
+  } catch (error) {
+    console.error("Error fetching posts:", error.message);
     return { error: "Internal server error" };
   }
 }
