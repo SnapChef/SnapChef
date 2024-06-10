@@ -1,6 +1,7 @@
 import Image from "next/image";
 import defaultPfp from "../../../../assets/icons/profile.svg";
 import CurrentProfile from "./currentProfile";
+import FollowersInfo from "./followersInfo";
 
 export default function Profile({ profile }) {
   const {
@@ -11,14 +12,13 @@ export default function Profile({ profile }) {
     followingCount,
     bio,
     pfpUrl,
+    followers,
+    following,
   } = profile?.user;
 
   return (
     <div className="flex">
-      {/* Left side: Profile information */}
       <div className="w-1/4 p-10 fixed">
-        {/* Profile picture */}
-
         <div className="mb-4 flex flex-col items-center">
           <Image
             src={pfpUrl ? pfpUrl : defaultPfp}
@@ -26,13 +26,12 @@ export default function Profile({ profile }) {
             width={100}
             height={100}
             style={{
-              width: pfpUrl ? "100px" : "110px", // Change width based on pfpUrl presence
-              height: pfpUrl ? "100px" : "110px", // Change height based on pfpUrl presence
+              width: pfpUrl ? "100px" : "110px",
+              height: pfpUrl ? "100px" : "110px",
               objectFit: "cover",
             }}
             className="rounded-full"
           />
-          {/* Username with setting icon */}
           <div className="flex items-center mb-4 mt-2">
             <p className="text-xl font-bold mr-2">{username}</p>
             <CurrentProfile
@@ -43,24 +42,20 @@ export default function Profile({ profile }) {
             />
           </div>
 
-          {/* Counts */}
           <div className="mx-28">
             <div className="mb-3 flex justify-between">
               <div className="text-center">
                 <h2 className="text-sm font-semibold mb-1">{postCount}</h2>
                 <p className="text-xs text-gray-500">Posts</p>
               </div>
-              <div className="text-center mx-5">
-                <h2 className="text-sm font-semibold mb-1">{followerCount}</h2>
-                <p className="text-xs text-gray-500">Followers</p>
-              </div>
-              <div className="text-center">
-                <h2 className="text-sm font-semibold mb-1">{followingCount}</h2>
-                <p className="text-xs text-gray-500">Following</p>
-              </div>
+              <FollowersInfo
+                followers={followers}
+                following={following}
+                followerCount={followerCount}
+                followingCount={followingCount}
+              />
             </div>
 
-            {/* Account bio */}
             <div>
               <p className="mt-5 text-xs text-black-500">{bio}</p>
             </div>

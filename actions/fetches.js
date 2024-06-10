@@ -42,8 +42,16 @@ export async function fetchProfile(username) {
     }
 
     // Extract user info
-    const { _id, name, bio, likedPosts, favoritedPosts, pfpUrl, following } =
-      user;
+    const {
+      _id,
+      name,
+      bio,
+      likedPosts,
+      favoritedPosts,
+      pfpUrl,
+      following,
+      followers,
+    } = user;
 
     // Get the post IDs from the user's document
     const postIds = user.posts;
@@ -75,12 +83,42 @@ export async function fetchProfile(username) {
           favoritedPosts,
           pfpUrl,
           following,
+          followers,
         },
         posts: postsWithLikes, // Return the found posts
       })
     );
   } catch (error) {
     console.error("Error fetching user and posts fetchProfile:", error);
+    return { error: "Internal server error" };
+  }
+}
+
+export async function fetchFollows(userIds) {
+  try {
+    if (!userIds || !Array.isArray(userIds)) {
+      return { message: "Id array is required" };
+    }
+
+    await connectMongoDB();
+
+    const users = await User.find({ _id: { $in: userIds } }).select(
+      "-password"
+    );
+
+    if (!users) {
+      return { error: "User not found" };
+    }
+
+    const userInfo = users.map((user) => ({
+      id: user._id,
+      username: user.name,
+      pfpUrl: user.pfpUrl,
+    }));
+
+    return JSON.parse(JSON.stringify({ users: userInfo }));
+  } catch (error) {
+    console.error("Error fetching user:", error);
     return { error: "Internal server error" };
   }
 }
