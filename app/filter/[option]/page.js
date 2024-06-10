@@ -1,5 +1,5 @@
 import Post from "@/components/post";
-import { fetchFilteredList } from "@/constants";
+import { fetchFilteredList } from "@/actions/fetches";
 import SortFilterDropdown from "@/components/filterOptions";
 import NotFoundPage from "@/app/not-found";
 
@@ -16,8 +16,9 @@ export default async function SearchByFilter({ params }) {
       return <NotFoundPage />;
     }
 
-    // debugging purposes
-    // console.log("Data received:", data);
+    if (data.message || data.error) {
+      return <NotFoundPage />;
+    }
 
     let filterOptionText;
     if (option === "highProtein") {

@@ -13,7 +13,6 @@ export default function Profile({ profile }) {
     pfpUrl,
   } = profile?.user;
 
-  console.log(profile), "PROFILE";
   return (
     <div className="flex">
       {/* Left side: Profile information */}

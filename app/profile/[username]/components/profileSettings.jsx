@@ -8,6 +8,7 @@ import defaultPfp from "../../../../assets/icons/profile.svg";
 export default function ProfileSettings({ setShowSettings, profileSettings }) {
   const { id, username, bio, pfpUrl } = profileSettings;
   const [updatedBio, setUpdatedBio] = useState(bio);
+  const [isDeleteProcessing, setIsDeleteProcessing] = useState(false);
 
   const [file, setFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -125,9 +126,13 @@ export default function ProfileSettings({ setShowSettings, profileSettings }) {
     );
     if (!confirmDelete) return;
 
+    if (isDeleteProcessing) return;
+
+    setIsDeleteProcessing(true);
+
     try {
       const res = await fetch("/api/deleteUser", {
-        method: "POST",
+        method: "DELETE",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${session.accessToken}`, // Pass the session token
@@ -146,6 +151,7 @@ export default function ProfileSettings({ setShowSettings, profileSettings }) {
     } catch (error) {
       console.error("Failed to delete profile:", error);
       alert("Failed to delete profile. Please try again later.");
+      setIsDeleteProcessing(false);
     }
   };
   return (
@@ -220,6 +226,7 @@ export default function ProfileSettings({ setShowSettings, profileSettings }) {
             <button
               className="bg-opacity-100 hover:bg-opacity-70 bg-red-500 text-white transition-colors ease-linear p-2 px-5 ml-5 mt-4 mb-2 rounded-xl font-semibold"
               onClick={handleDeleteProfile}
+              disabled={isDeleteProcessing}
             >
               Delete Profile
             </button>

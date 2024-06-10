@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import SignInModal from "../app/signin/components/signInModal";
 import { motion } from "framer-motion";
+import { fetchProfile } from "@/actions/fetches";
 
 export default function Likes({ likeCount, recipeId }) {
   const [isLiked, setIsLiked] = useState(false);
@@ -18,12 +19,8 @@ export default function Likes({ likeCount, recipeId }) {
     const fetchLikedPosts = async () => {
       if (session) {
         try {
-          const userData = await fetch(`/api/fetchProfile`, {
-            method: "POST",
-            body: JSON.stringify({ username: session.user.name }),
-          });
-          const responseJson = await userData.json();
-          setIsLiked(responseJson.user.likedPosts.includes(recipeId));
+          const userData = await fetchProfile(session.user.name);
+          setIsLiked(userData.user.likedPosts.includes(recipeId));
         } catch (error) {
           console.error("Error fetching user data:", error);
         }
@@ -41,7 +38,7 @@ export default function Likes({ likeCount, recipeId }) {
 
     try {
       const method = !isLiked ? "PATCH" : "DELETE";
-      const response = await fetch("/api/updateLikeCount", {
+      const response = await fetch("/api/updateLikes", {
         method,
         body: JSON.stringify({
           user_id: session.user.id,

@@ -4,7 +4,7 @@ import StepList from "@/app/recipes/[recipeId]/components/stepList";
 import NotFoundPage from "@/app/not-found";
 import Link from "next/link";
 import { FaUserCircle } from "react-icons/fa";
-import { fetchRecipe } from "@/constants/fetches.js";
+import { fetchRecipe } from "@/actions/fetches.js";
 import Likes from "@/components/likes";
 import Favorites from "@/components/favorites";
 import Image from "next/image";

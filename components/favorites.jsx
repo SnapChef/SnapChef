@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import SignInModal from "../app/signin/components/signInModal";
 import { motion } from "framer-motion";
+import { fetchProfile } from "@/actions/fetches";
 
 export default function Favorites({ recipeId }) {
   const [isFavorited, setIsFavorited] = useState(false);
@@ -16,12 +17,8 @@ export default function Favorites({ recipeId }) {
     const fetchFavoritedPosts = async () => {
       if (session) {
         try {
-          const userData = await fetch(`/api/fetchProfile`, {
-            method: "POST",
-            body: JSON.stringify({ username: session.user.name }),
-          });
-          const responseJson = await userData.json();
-          setIsFavorited(responseJson.user.favoritedPosts.includes(recipeId));
+          const userData = await fetchProfile(session.user.name);
+          setIsFavorited(userData.user.favoritedPosts.includes(recipeId));
         } catch (error) {
           console.error("Error fetching user data:", error);
         }

@@ -1,9 +1,12 @@
+"use server";
+
 import { connectMongoDB } from "@/lib/mongodb";
 import Post from "@/models/post";
 import User from "@/models/user";
 import Comment from "@/models/comment";
 
 // SSR functions
+
 export async function fetchHomeRecipes() {
   try {
     await connectMongoDB();
@@ -12,8 +15,8 @@ export async function fetchHomeRecipes() {
       posts.map(async (post) => {
         const user = await User.findById(post.user_id).lean();
         if (user) {
-          post.user_pfp = user.pfpUrl;
-          post.recipe_likes = post.liked_user_ids.length; // Add profile picture to post
+          post.user_pfp = user.pfpUrl; // Add profile picture to post
+          post.recipe_likes = post.liked_user_ids.length;
         }
         return post;
       })
@@ -32,25 +35,15 @@ export async function fetchProfile(username) {
     }
 
     await connectMongoDB();
-    const user = await User.findOne({ name: username });
+    const user = await User.findOne({ name: username }).select("-password");
 
     if (!user) {
       return { error: "User not found" };
     }
 
     // Extract user info
-    let {
-      _id,
-      name,
-      bio,
-      followerCount,
-      followingCount,
-      postCount,
-      likedPosts,
-      favoritedPosts,
-      pfpUrl,
-      following,
-    } = user;
+    const { _id, name, bio, likedPosts, favoritedPosts, pfpUrl, following } =
+      user;
 
     // Get the post IDs from the user's document
     const postIds = user.posts;
@@ -59,13 +52,14 @@ export async function fetchProfile(username) {
     const posts = await Post.find({ _id: { $in: postIds } });
 
     // Update the recipe_likes to be liked_user_ids.length
-    posts.forEach((post) => {
-      post.recipe_likes = post.liked_user_ids.length;
+    const postsWithLikes = posts.map((post) => {
+      return {
+        ...post.toObject(), // Convert mongoose document to plain JS object
+        recipe_likes: post.liked_user_ids.length,
+      };
     });
 
-    // Update the followerCount to be followers.length
-    followerCount = user.followers.length;
-    followingCount = user.following.length;
+    // console.log("posts", posts[0]);
 
     // Return user info along with their posts
     return JSON.parse(
@@ -74,15 +68,15 @@ export async function fetchProfile(username) {
           id: _id,
           username: name,
           bio,
-          followerCount,
-          followingCount,
-          postCount,
+          followerCount: user.followers.length,
+          followingCount: user.following.length,
+          postCount: postIds.length,
           likedPosts,
           favoritedPosts,
           pfpUrl,
           following,
         },
-        posts, // Return the found posts
+        posts: postsWithLikes, // Return the found posts
       })
     );
   } catch (error) {
@@ -136,17 +130,14 @@ export async function fetchComments(recipeId) {
 export async function fetchFavRecipes(username) {
   try {
     if (!username) {
-      return NextResponse.json(
-        { message: "Username is required" },
-        { status: 400 }
-      );
+      return { message: "Username is required" };
     }
 
     await connectMongoDB();
     const user = await User.findOne({ name: username });
 
     if (!user) {
-      return NextResponse.json({ message: "User not found" }, { status: 404 });
+      return { message: "User not found" };
     }
 
     // get favorited posts IDs from the user's document
@@ -164,6 +155,67 @@ export async function fetchFavRecipes(username) {
     return { documents: documents };
   } catch (error) {
     console.error("Error fetching user and posts fetch fav:", error);
+    return { error: "Internal server error" };
+  }
+}
+
+export async function fetchFilteredList(option) {
+  try {
+    await connectMongoDB();
+
+    let query;
+    if (
+      option === "highProtein" ||
+      option === "vegan" ||
+      option === "glutenFree"
+    ) {
+      query = { recipe_attributes: option };
+    } else {
+      return { message: "Filter option not available!" };
+    }
+
+    const documents = await Post.find(query);
+    documents.forEach((post) => {
+      post.recipe_likes = post.liked_user_ids.length;
+    });
+
+    if (!documents || documents.length === 0)
+      return { message: "No recipe(s) found!" };
+
+    return { documents: documents };
+  } catch (error) {
+    console.error("Error fetching posts:", error.message);
+    return { error: "Internal server error" };
+  }
+}
+
+// only fetches recipe names for autocomplete search feature
+export async function fetchRecipeNames() {
+  try {
+    await connectMongoDB();
+    const documents = await Post.find();
+    const recipeNames = documents.map((doc) => doc.recipe_name);
+
+    return { recipeNames: recipeNames };
+  } catch (error) {
+    console.error("Error fetching recipe names:", error);
+    return { error: "Internal server error" };
+  }
+}
+
+export async function fetchSearchTerm(term) {
+  try {
+    await connectMongoDB();
+    const query = { recipe_name: { $regex: term, $options: "i" } };
+    const documents = await Post.find(query);
+
+    if (!documents || documents.length === 0) {
+      return { message: "No recipe(s) found!" };
+    }
+
+    return { documents: documents };
+  } catch (error) {
+    console.error("Error fetching posts:", error.message);
     return { error: "Internal server error" };
   }
 }
