@@ -9,6 +9,7 @@ export default function ProfileSettings({ setShowSettings, profileSettings }) {
   const { id, username, bio, pfpUrl } = profileSettings;
   const [updatedBio, setUpdatedBio] = useState(bio);
   const [isDeleteProcessing, setIsDeleteProcessing] = useState(false);
+  const [isConfirmProcessing, setIsConfirmProcessing] = useState(false);
 
   const [file, setFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -41,10 +42,14 @@ export default function ProfileSettings({ setShowSettings, profileSettings }) {
       const updatedFields = {};
       let presignedUrlResponse;
 
+      if (isConfirmProcessing) return;
+      setIsConfirmProcessing(true);
+
       if (file) {
-        // Check if pre-signed URL already given
+        console.log("file", pfpUrl);
         if (pfpUrl) {
           // Get existing object key from URL
+
           const parts = pfpUrl.split("/");
 
           // Extract the date part (2024-03-17)
@@ -117,6 +122,7 @@ export default function ProfileSettings({ setShowSettings, profileSettings }) {
         console.log("No changes to update");
       }
     } catch (error) {
+      setIsConfirmProcessing(false);
       console.error("Error updating user information:", error);
     }
   };
@@ -220,6 +226,7 @@ export default function ProfileSettings({ setShowSettings, profileSettings }) {
             <button
               className="bg-custom-main-dark bg-opacity-100 hover:bg-opacity-70 text-white transition-colors ease-linear p-2 px-8 ml-60 mt-4 mb-2 rounded-xl font-semibold"
               onClick={handleConfirmClick}
+              disabled={isConfirmProcessing}
             >
               Confirm
             </button>

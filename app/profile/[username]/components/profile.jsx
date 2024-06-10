@@ -39,7 +39,7 @@ export default function Profile({ profile }) {
               id={id}
               username={username}
               bio={bio}
-              pfpUrl={pfpUrl ? pfpUrl : defaultPfp}
+              pfpUrl={pfpUrl ? pfpUrl : null}
             />
           </div>
 
