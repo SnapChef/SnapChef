@@ -45,7 +45,7 @@ export default function FollowersInfo({
         <FollowsModal
           userIds={following}
           setShowFollows={setShowFollowingContent}
-          title={"Follows"}
+          title={"Following"}
         />
       )}
     </>
