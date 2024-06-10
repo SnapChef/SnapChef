@@ -11,7 +11,7 @@ export const authOptions = {
       credentials: {},
 
       async authorize(credentials) {
-        const { username, password } = credentials;
+        const { username, email, password } = credentials;
         try {
           await connectMongoDB();
           const user = await User.findOne({ name: username });
@@ -39,19 +39,16 @@ export const authOptions = {
     signIn: "/",
   },
   callbacks: {
-    async jwt({ token, user, session }) {
+    async jwt({ token, user }) {
       if (user) {
-        return { ...token, id: user._id, username: user.username };
+        return { ...token, id: user._id };
       }
       return token;
     },
 
-    async session({ session, token, user }) {
-      // Send id to the client form provider
-      // console.log(user);
-      session.accessToken = token.accessToken;
+    async session({ session, token }) {
       session.user.id = token.id;
-      session.user.username = token.username;
+      console.log("session: ", session);
       return session;
     },
   },

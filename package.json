@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "aws-sdk": "^2.1567.0",
+    "aws4": "^1.13.0",
     "bcryptjs": "^2.4.3",
     "express": "^4.18.2",
     "framer-motion": "^11.0.3",
