@@ -50,9 +50,6 @@ export default function CommentBox({ recipeId }) {
       const responseData = await createCommentResponse.json();
       console.log(responseData);
 
-      // redirect to page once comment is submitted
-      router.push(`/recipes/${recipeId}`);
-
       // clear comment box after submission
       setCommentText("");
     } catch (error) {
