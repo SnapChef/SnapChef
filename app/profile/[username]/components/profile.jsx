@@ -1,9 +1,8 @@
-"use client";
 import Image from "next/image";
 import defaultPfp from "../../../../assets/icons/profile.svg";
 import CurrentProfile from "./currentProfile";
-import FollowsContainer from "./followsContainer";
-import { useState } from "react";
+import FollowsContainer from "./followsModal";
+import FollowersInfo from "./followersInfo";
 
 export default function Profile({ profile }) {
   const {
@@ -15,17 +14,6 @@ export default function Profile({ profile }) {
     bio,
     pfpUrl,
   } = profile?.user;
-
-  const [showFollowersContent, setShowFollowersContent] = useState(false);
-  const [showFollowingContent, setShowFollowingContent] = useState(false);
-
-  const handleFollowersClick = () => {
-    setShowFollowersContent(!showFollowersContent);
-  };
-
-  const handleFollowingClick = () => {
-    setShowFollowingContent(!showFollowingContent);
-  };
 
   return (
     <div className="flex">
@@ -64,20 +52,10 @@ export default function Profile({ profile }) {
                 <h2 className="text-sm font-semibold mb-1">{postCount}</h2>
                 <p className="text-xs text-gray-500">Posts</p>
               </div>
-              <div
-                onClick={handleFollowersClick}
-                className="cursor-pointer text-center mx-5"
-              >
-                <h2 className="text-sm font-semibold mb-1">{followerCount}</h2>
-                <p className="text-xs text-gray-500">Followers</p>
-              </div>
-              <div
-                className="text-center cursor-pointer"
-                onClick={handleFollowingClick}
-              >
-                <h2 className="text-sm font-semibold mb-1">{followingCount}</h2>
-                <p className="text-xs text-gray-500">Following</p>
-              </div>
+              <FollowersInfo
+                followerCount={followerCount}
+                followingCount={followingCount}
+              />
             </div>
 
             {/* Account bio */}
@@ -87,18 +65,6 @@ export default function Profile({ profile }) {
           </div>
         </div>
       </div>
-      {showFollowersContent && (
-        <FollowsContainer
-          setShowFollows={setShowFollowersContent}
-          followsContainer={{ title: "Followers" }}
-        />
-      )}
-      {showFollowingContent && (
-        <FollowsContainer
-          setShowFollows={setShowFollowingContent}
-          followsContainer={{ title: "Following" }}
-        />
-      )}
     </div>
   );
 }
