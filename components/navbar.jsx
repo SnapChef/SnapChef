@@ -18,7 +18,7 @@ import Profile from "../assets/icons/profile.svg";
 import ProfileFill from "../assets/icons/profileFill.svg";
 import Autosuggest from "react-autosuggest";
 import Fuse from "fuse.js";
-import { fetchRecipeNames } from "@/actions";
+import { fetchRecipeNames } from "@/actions/fetches";
 import Notifications from "./notifications";
 
 const fuseSettings = {
@@ -73,12 +73,11 @@ function Navbar() {
   // }, [searchTerm]);
 
   useEffect(() => {
-    const fetchRecipeNames = async () => {
+    const recipeNames = async () => {
       if (searchTerm.length > 1) {
         try {
-          const recipeData = await fetch(`/api/fetchRecipeNames/2`);
-          const responseJson = await recipeData.json();
-          setSuggestions(responseJson?.recipeNames || []);
+          const recipeData = await fetchRecipeNames();
+          setSuggestions(recipeData?.recipeNames || []);
         } catch (error) {
           console.error("Error fetching user data:", error);
         }
@@ -87,7 +86,7 @@ function Navbar() {
       }
     };
 
-    fetchRecipeNames();
+    recipeNames();
   }, [searchTerm]);
 
   // fuzzy search integration

@@ -6,6 +6,7 @@ import User from "@/models/user";
 import Comment from "@/models/comment";
 
 // SSR functions
+
 export async function fetchHomeRecipes() {
   try {
     await connectMongoDB();
@@ -180,6 +181,37 @@ export async function fetchFilteredList(option) {
 
     if (!documents || documents.length === 0)
       return { message: "No recipe(s) found!" };
+
+    return { documents: documents };
+  } catch (error) {
+    console.error("Error fetching posts:", error.message);
+    return { error: "Internal server error" };
+  }
+}
+
+// only fetches recipe names for autocomplete search feature
+export async function fetchRecipeNames() {
+  try {
+    await connectMongoDB();
+    const documents = await Post.find();
+    const recipeNames = documents.map((doc) => doc.recipe_name);
+
+    return { recipeNames: recipeNames };
+  } catch (error) {
+    console.error("Error fetching recipe names:", error);
+    return { error: "Internal server error" };
+  }
+}
+
+export async function fetchSearchTerm(term) {
+  try {
+    await connectMongoDB();
+    const query = { recipe_name: { $regex: term, $options: "i" } };
+    const documents = await Post.find(query);
+
+    if (!documents || documents.length === 0) {
+      return { message: "No recipe(s) found!" };
+    }
 
     return { documents: documents };
   } catch (error) {

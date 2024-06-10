@@ -1,6 +1,6 @@
 import React from "react";
 import Post from "@/components/post";
-import { fetchSearchTerm } from "@/actions";
+import { fetchSearchTerm } from "@/actions/fetches";
 import SortFilterDropdown from "@/components/filterOptions";
 
 export default async function Search({ params }) {
