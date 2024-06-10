@@ -1,11 +1,12 @@
 "use client";
-import React, { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import FollowsContent from "./followsContent";
+import { fetchFollows } from "@/actions/fetches";
 import defaultPfp from "../../../../assets/icons/profile.svg";
-import Link from "next/link";
 
-export default function FollowsModal({ setShowFollows, title }) {
+export default function FollowsModal({ setShowFollows, title, userIds }) {
+  const [users, setUsers] = useState([]);
   const followsRef = useRef();
 
   const handleClickOutside = (event) => {
@@ -13,6 +14,22 @@ export default function FollowsModal({ setShowFollows, title }) {
       setShowFollows(false);
     }
   };
+
+  useEffect(() => {
+    const fetchUserFollows = async () => {
+      try {
+        const userList = await fetchFollows(userIds);
+        if (!userList || userList.error || userList.message) {
+          console.log("user error", userList.error);
+          return;
+        }
+        setUsers(userList.users);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchUserFollows();
+  }, [userIds]);
 
   return (
     <div
@@ -30,36 +47,19 @@ export default function FollowsModal({ setShowFollows, title }) {
           <h1 className="text-white text-xl font-bold">{title}</h1>
         </div>
         <div className="bg-white rounded-b-lg p-4">
-          {" "}
-          {/* Follows Content */}
-          <FollowsContent
-            followsContent={{
-              id: "123",
-              username: "joemama", // Ensure the username is correctly defined here
-              pfpUrl: defaultPfp,
-            }}
-          />
-          <FollowsContent
-            followsContent={{
-              id: "123",
-              username: "joemama", // Ensure the username is correctly defined here
-              pfpUrl: defaultPfp,
-            }}
-          />
-          <FollowsContent
-            followsContent={{
-              id: "123",
-              username: "joemama", // Ensure the username is correctly defined here
-              pfpUrl: defaultPfp,
-            }}
-          />
-          <FollowsContent
-            followsContent={{
-              id: "123",
-              username: "joemama", // Ensure the username is correctly defined here
-              pfpUrl: defaultPfp,
-            }}
-          />
+          {users.length === 0 ? (
+            <p className="p-10">No Users Found.</p>
+          ) : (
+            users.map((user) => (
+              <FollowsContent
+                key={user.id}
+                followsContent={{
+                  username: user.username,
+                  pfpUrl: user.pfpUrl ? user.pfpUrl : defaultPfp,
+                }}
+              />
+            ))
+          )}
         </div>
       </motion.div>
     </div>

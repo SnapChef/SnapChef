@@ -2,7 +2,12 @@
 import FollowsModal from "./followsModal";
 import { useState } from "react";
 
-export default function FollowersInfo({ followerCount, followingCount }) {
+export default function FollowersInfo({
+  followerCount,
+  followingCount,
+  followers,
+  following,
+}) {
   const [showFollowersContent, setShowFollowersContent] = useState(false);
   const [showFollowingContent, setShowFollowingContent] = useState(false);
 
@@ -31,12 +36,14 @@ export default function FollowersInfo({ followerCount, followingCount }) {
       </div>
       {showFollowersContent && (
         <FollowsModal
+          userIds={followers}
           setShowFollows={setShowFollowersContent}
           title={"Followers"}
         />
       )}
       {showFollowingContent && (
         <FollowsModal
+          userIds={following}
           setShowFollows={setShowFollowingContent}
           title={"Follows"}
         />
