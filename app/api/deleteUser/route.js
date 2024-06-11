@@ -1,8 +1,10 @@
-import { getToken } from "next-auth/jwt";
 import { connectMongoDB } from "@/lib/mongodb";
 import User from "@/models/user";
 import Post from "@/models/post";
 import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../auth/[...nextauth]/route";
+
 import AWS from "aws-sdk";
 
 const s3 = new AWS.S3({
@@ -28,9 +30,10 @@ async function deleteS3Object(url) {
 
 export async function DELETE(req) {
   try {
-    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    const session = await getServerSession(authOptions);
+    console.log("token", session);
 
-    if (!token) {
+    if (!session) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 

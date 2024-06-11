@@ -41,7 +41,9 @@ export default function SignUpBox() {
 
     const passwordReg = /^(?=.*[A-Z]).{6,}$/;
     if (!passwordReg.test(password)) {
-      setError("Password must be at least 6 characters long and contain at least one uppercase letter.");
+      setError(
+        "Password must be at least 6 characters long and contain at least one uppercase letter."
+      );
       return;
     }
     
