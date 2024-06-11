@@ -24,10 +24,21 @@ export default function SignUpBox() {
       setError("All fields are necessary.");
       return;
     }
+    if (username.length < 3 || username.length > 20) {
+      setError("Username must be between 3 and 20 characters.");
+      return;
+    }
+
+    if (password.length < 6 || password.length > 20) {
+      setError("Password must be between 6 and 20 characters.");
+      return;
+    }
+    
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
     }
+
     const passwordReg = /^(?=.*[A-Z]).{6,}$/;
     if (!passwordReg.test(password)) {
       setError("Password must be at least 6 characters long and contain at least one uppercase letter.");
