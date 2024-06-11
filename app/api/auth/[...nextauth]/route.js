@@ -16,6 +16,7 @@ export const authOptions = {
       credentials: {},
 
       async authorize(credentials) {
+        console.log("Credentials!", credentials);
         const { username, password } = credentials;
         try {
           await connectMongoDB();
@@ -29,6 +30,7 @@ export const authOptions = {
           if (!passMatch) {
             return null;
           }
+          console.log("User:", user);
           return user;
         } catch (error) {
           console.log("Error: ", error);
@@ -47,19 +49,27 @@ export const authOptions = {
     async jwt({ token, user }) {
       console.log("JWT:", token);
       if (user) {
-        return { ...token, id: user.id, name: user.name };
+        return { ...token, id: user.id };
       }
       return token;
     },
     async session({ session, token }) {
+      console.log("Session:", session);
       session.user.id = token.id;
       session.user.name = token.name;
-      console.log("Session:", session);
+
       return session;
     },
     async signIn({ user, account }) {
       const { name, email, image } = user;
       let username = name.replace(/\s/g, "");
+      console.log("sign in account:", account);
+
+      if (account.provider === "credentials") {
+        user.id = user._id;
+        user.name = user.name;
+        return user;
+      }
 
       if (account.provider === "google") {
         try {

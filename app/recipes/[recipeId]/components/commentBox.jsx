@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import SignInModal from "../../../signin/components/signInModal";
+import moment from 'moment';
 
 export default function CommentBox({ recipeId }) {
   const { data: session } = useSession();
@@ -38,6 +39,7 @@ export default function CommentBox({ recipeId }) {
           recipe_id: recipeId,
           user_name: session.user?.name,
           text: commentText,
+          time_sent: moment().format('M/D/YYYY [at] h:mmA'),
         }),
       });
 
@@ -47,9 +49,6 @@ export default function CommentBox({ recipeId }) {
 
       const responseData = await createCommentResponse.json();
       console.log(responseData);
-
-      // redirect to page once comment is submitted
-      router.push(`/recipes/${recipeId}`);
 
       // clear comment box after submission
       setCommentText("");
@@ -75,7 +74,7 @@ export default function CommentBox({ recipeId }) {
           type="submit"
           className="bg-custom-main-dark px-4 py-2 rounded-lg text-white hover:bg-opacity-70 transition-all ease-linear mt-2"
         >
-          Submit Comment
+          Add Comment
         </button>
       </form>
       {showModal && <SignInModal onClose={() => setShowModal(false)} />}

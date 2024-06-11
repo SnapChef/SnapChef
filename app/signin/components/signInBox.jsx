@@ -7,6 +7,8 @@ import { RiLockPasswordLine } from "react-icons/ri";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { GoogleAuthProvider, signInWithPopup, getAuth } from "firebase/auth";
+import { app } from "../../../firebase.js";
 
 export default function SignInBox() {
   const [username, setUsername] = useState("");
@@ -37,6 +39,21 @@ export default function SignInBox() {
         return;
       }
 
+      router.replace("/home");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleGoogleClick = async () => {
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: "select_account" });
+
+    try {
+      const result = await signInWithPopup(auth, provider);
+      var userEmail = result.user.email;
+      console.log(userEmail);
       router.replace("/home");
     } catch (error) {
       console.log(error);

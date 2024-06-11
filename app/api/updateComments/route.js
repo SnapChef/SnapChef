@@ -1,7 +1,4 @@
-// Import necessary modules and models
 import { connectMongoDB } from "@/lib/mongodb";
-//import User from "@/models/user";
-//import Post from "@/models/post";
 import Comment from "@/models/comment";
 import { NextResponse } from "next/server";
 
@@ -12,6 +9,8 @@ export async function POST(req) {
         recipe_id, 
         user_name, 
         text,
+        time_sent,
+
     } = await req.json();
 
     await connectMongoDB();
@@ -22,22 +21,8 @@ export async function POST(req) {
         recipe_id, 
         user_name, 
         text,
+        time_sent,
     });
-
-    // add the below if comments require being in post and user schema
-    // Update User document with the new comment ID
-    // await User.findOneAndUpdate(
-    //     { _id: user_id },
-    //     { $push: { userComments: newComment._id } },
-    //     { new: true }
-    // );
-    
-    // // Update Post document with the new comment ID
-    // await Post.findOneAndUpdate(
-    //     { _id: recipe_id },
-    //     { $push: { postComments: newComment._id } },
-    //     { new: true }
-    // );
 
     //debugging purposess
     console.log(newComment);

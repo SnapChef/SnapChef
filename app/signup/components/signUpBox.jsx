@@ -11,6 +11,7 @@ import { motion } from "framer-motion";
 export default function SignUpBox() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
   const router = useRouter();
@@ -19,10 +20,25 @@ export default function SignUpBox() {
     e.preventDefault();
 
     //if no input is in either field
-    if (!username || !password) {
+    if (!username || !password || !confirmPassword) {
       setError("All fields are necessary.");
       return;
     }
+    if (username.length < 3 || username.length > 20) {
+      setError("Username must be between 3 and 20 characters.");
+      return;
+    }
+
+    if (password.length < 6 || password.length > 20) {
+      setError("Password must be between 6 and 20 characters.");
+      return;
+    }
+    
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
     const passwordReg = /^(?=.*[A-Z]).{6,}$/;
     if (!passwordReg.test(password)) {
       setError(
@@ -30,6 +46,7 @@ export default function SignUpBox() {
       );
       return;
     }
+    
     try {
       //checking user existence
       const resUserExists = await fetch("api/userExists", {
@@ -133,6 +150,18 @@ export default function SignUpBox() {
                   <RiLockPasswordLine className="text-gray-400 m-2" />
                   <input
                     onChange={(e) => setPassword(e.target.value)}
+                    type="password"
+                    name="password"
+                    placeholder="Enter password"
+                    className="border-2 bg-gray-200 
+                                outline-none text-sm flex-1"
+                  />
+                </div>
+                <h1 className="flex w-64 text-xs">Confirm Password</h1>
+                <div className="bg-gray-200 w-64 p-2 flex items-center m-2 rounded-2xl">
+                  <RiLockPasswordLine className="text-gray-400 m-2" />
+                  <input
+                    onChange={(e) => setConfirmPassword(e.target.value)}
                     type="password"
                     name="password"
                     placeholder="Enter password"
