@@ -10,6 +10,7 @@ import Favorites from "@/components/favorites";
 import Image from "next/image";
 import CommentBox from "@/app/recipes/[recipeId]/components/commentBox";
 import CommentSection from "@/app/recipes/[recipeId]/components/commentSection";
+import EditRecipeButton from "@/app/recipes/[recipeId]/components/editRecipeButton";
 
 export default async function RecipePage({ params }) {
   const { recipeId } = params;
@@ -22,28 +23,31 @@ export default async function RecipePage({ params }) {
 
   return (
     <div className="max-w-3xl mx-auto my-16">
-      <Link
-        href={`/profile/${recipe.recipe.user_name}`}
-        className="flex items-center mb-1 hover:underline hover:cursor-pointer hover:opacity-70"
-      >
-        {recipe.recipe.user_pfp ? (
-          <Image
-            src={recipe.recipe.user_pfp}
-            className="rounded-full mr-2"
-            height={50}
-            width={50}
-            style={{
-              width: "50px",
-              height: "50px",
-              objectFit: "cover",
-            }}
-            alt={recipe.recipe.user_name}
-          />
-        ) : (
-          <FaUserCircle className="mr-2 text-xl text-custom-main-dark" />
-        )}
-        <p className="text-2xl">{recipe.recipe.user_name}</p>
-      </Link>
+      <div className="flex justify-between items-center">
+        <Link
+          href={`/profile/${recipe.recipe.user_name}`}
+          className="flex items-center mb-1 hover:underline hover:cursor-pointer hover:opacity-70"
+        >
+          {recipe.recipe.user_pfp ? (
+            <Image
+              src={recipe.recipe.user_pfp}
+              className="rounded-full mr-2"
+              height={50}
+              width={50}
+              style={{
+                width: "50px",
+                height: "50px",
+                objectFit: "cover",
+              }}
+              alt={recipe.recipe.user_name}
+            />
+          ) : (
+            <FaUserCircle className="mr-2 text-xl text-custom-main-dark" />
+          )}
+          <p className="text-2xl">{recipe.recipe.user_name}</p>
+        </Link>
+        <EditRecipeButton username={recipe.recipe.user_name} recipeId={recipeId} />
+      </div>
       <img
         src={recipe.recipe.recipe_image}
         alt={recipe.recipe_name}
