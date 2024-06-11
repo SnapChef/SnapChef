@@ -20,6 +20,10 @@ export const commentSchema = new Schema(
       type: String,
       required: true,
     },
+    time_sent: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );
