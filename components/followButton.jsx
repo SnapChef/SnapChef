@@ -2,9 +2,10 @@ import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import SignInModal from "../app/signin/components/signInModal";
 import { motion } from "framer-motion";
+import { fetchProfile } from "@/actions/fetches";
 
 export default function FollowButton({ targetId }) {
-  const [isFollowing, setIsFollowing] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
   const { data: session } = useSession();
@@ -13,12 +14,8 @@ export default function FollowButton({ targetId }) {
     const fetchFollowing = async () => {
       if (session) {
         try {
-          const userData = await fetch(`/api/fetchProfile/2`, {
-            method: "POST",
-            body: JSON.stringify({ username: session.user.name }),
-          });
-          const responseJson = await userData.json();
-          setIsFollowing(responseJson.user.following.includes(targetId));
+          const userData = await fetchProfile(session.user.name);
+          setIsFollowing(userData.user.following.includes(targetId));
         } catch (error) {
           console.error("Error fetching user data following:", error);
         }
@@ -50,13 +47,14 @@ export default function FollowButton({ targetId }) {
         throw new Error("Failed to update like count");
       }
 
-      const responseData = await response.json();
-      console.log(responseData);
       setIsFollowing(!isFollowing);
     } catch (error) {
       console.error("Error updating like count:", error);
     }
   };
+  if (isFollowing === null) {
+    return null;
+  }
 
   return (
     <div className="flex-row items-center justify-center">

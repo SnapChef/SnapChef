@@ -32,10 +32,6 @@ export const postSchema = new Schema(
       type: String,
       required: true,
     },
-    recipe_likes: {
-      type: Number,
-      default: 0,
-    },
     liked_user_ids: [
       {
         type: mongoose.Schema.Types.ObjectId,

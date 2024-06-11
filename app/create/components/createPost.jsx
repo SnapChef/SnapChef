@@ -8,6 +8,7 @@ import Post from "@/components/post";
 import StepSection from "./stepsSection";
 import IngredientSection from "./ingredientSection";
 import AttributeSelector from "./attributeSelector";
+import { set } from "mongoose";
 
 export default function CreatePost() {
   const { data: session } = useSession();
@@ -15,6 +16,7 @@ export default function CreatePost() {
   const [showPreview, setShowPreview] = useState(false);
   const [recipeImagePreview, setRecipeImagePreview] = useState(null);
   const [recipeImageUpload, setRecipeImageUpload] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [formData, setFormData] = useState({
     recipe_name: "",
     recipe_time: "",
@@ -57,6 +59,10 @@ export default function CreatePost() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (isProcessing) return;
+
+    setIsProcessing(true);
 
     try {
       // Step 1: Get pre-signed URL for image upload
@@ -121,6 +127,7 @@ export default function CreatePost() {
       router.push(`/recipes/${responseData.recipeId}`);
     } catch (error) {
       console.error("Error:", error.message);
+      setIsProcessing(false);
       // Handle error
     }
   };
@@ -130,7 +137,7 @@ export default function CreatePost() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="max-w-xl mx-auto p-6 shadow-md rounded-md my-26 border-4 border-black"
+      className="max-w-xl mx-auto p-6 shadow-md rounded-md my-26"
     >
       <h1 className="text-3xl font-semibold mb-4">Create New Post</h1>
 
@@ -286,6 +293,7 @@ export default function CreatePost() {
           <div className="flex items-center space-x-4 mt-4">
             <button
               type="submit"
+              disabled={isProcessing}
               className="bg-custom-main-dark px-4 py-2 rounded-lg text-white hover:bg-opacity-70 transition-all ease-linear"
             >
               Publish Post

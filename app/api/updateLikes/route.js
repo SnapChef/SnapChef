@@ -8,13 +8,24 @@ export async function PATCH(req) {
     const { user_id, recipeId } = await req.json();
 
     await connectMongoDB();
+    if (!user_id || !recipeId) {
+      return NextResponse.error(
+        new Error("User ID and Recipe ID are required"),
+        400
+      );
+    }
+
+    const user = await User.findById(user_id);
+
+    if (!user) {
+      return NextResponse.error(new Error("User not found"), 404);
+    }
 
     // Find the post and update likes atomically
     const updatedPost = await Post.findOneAndUpdate(
       { _id: recipeId },
       {
         $addToSet: { liked_user_ids: user_id },
-        $inc: { recipe_likes: 1 }, // increment recipe likes // Add user if not already liked
       },
       { new: true } // Return the updated document
     );
@@ -37,9 +48,11 @@ export async function PATCH(req) {
       return NextResponse.error(new Error("User not found"), 404);
     }
 
+    const likeCount = updatedPost.liked_user_ids.length;
+
     return NextResponse.json({
       message: "Post liked successfully",
-      likeCount: updatedPost.recipe_likes,
+      likeCount,
     });
   } catch (error) {
     console.log(error);
@@ -51,6 +64,19 @@ export async function DELETE(req) {
   try {
     const { user_id, recipeId } = await req.json();
 
+    if (!user_id || !recipeId) {
+      return NextResponse.error(
+        new Error("User ID and Recipe ID are required"),
+        400
+      );
+    }
+
+    const user = await User.findById(user_id);
+
+    if (!user) {
+      return NextResponse.error(new Error("User not found"), 404);
+    }
+
     await connectMongoDB();
 
     // Find the post and update likes atomically (using $pull)
@@ -58,7 +84,6 @@ export async function DELETE(req) {
       { _id: recipeId },
       {
         $pull: { liked_user_ids: user_id }, // Remove user if liked
-        $inc: { recipe_likes: -1 }, // Decrement recipe likes
       },
       { new: true }
     );
@@ -79,10 +104,12 @@ export async function DELETE(req) {
       return NextResponse.error(new Error("User not found"), 404);
     }
 
+    const likeCount = updatedPost.liked_user_ids.length;
+
     // You can optionally return a success message here
     return NextResponse.json({
       message: "Post unliked successfully",
-      likeCount: updatedPost.recipe_likes,
+      likeCount,
     });
   } catch (error) {
     console.log(error);

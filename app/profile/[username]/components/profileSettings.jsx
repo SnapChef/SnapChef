@@ -1,3 +1,4 @@
+"use client";
 import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { signOut, useSession } from "next-auth/react";
@@ -5,8 +6,10 @@ import Image from "next/image";
 import defaultPfp from "../../../../assets/icons/profile.svg";
 
 export default function ProfileSettings({ setShowSettings, profileSettings }) {
-  const { id, userName, bio, profilePic } = profileSettings;
+  const { id, username, bio, pfpUrl } = profileSettings;
   const [updatedBio, setUpdatedBio] = useState(bio);
+  const [isDeleteProcessing, setIsDeleteProcessing] = useState(false);
+  const [isConfirmProcessing, setIsConfirmProcessing] = useState(false);
 
   const [file, setFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -39,11 +42,15 @@ export default function ProfileSettings({ setShowSettings, profileSettings }) {
       const updatedFields = {};
       let presignedUrlResponse;
 
+      if (isConfirmProcessing) return;
+      setIsConfirmProcessing(true);
+
       if (file) {
-        // Check if pre-signed URL already given
-        if (profilePic) {
+        console.log("file", pfpUrl);
+        if (pfpUrl) {
           // Get existing object key from URL
-          const parts = profilePic.split("/");
+
+          const parts = pfpUrl.split("/");
 
           // Extract the date part (2024-03-17)
           const datePart = parts[parts.length - 2];
@@ -115,6 +122,7 @@ export default function ProfileSettings({ setShowSettings, profileSettings }) {
         console.log("No changes to update");
       }
     } catch (error) {
+      setIsConfirmProcessing(false);
       console.error("Error updating user information:", error);
     }
   };
@@ -124,12 +132,16 @@ export default function ProfileSettings({ setShowSettings, profileSettings }) {
     );
     if (!confirmDelete) return;
 
+    if (isDeleteProcessing) return;
+
+    setIsDeleteProcessing(true);
+
     try {
       const res = await fetch("/api/deleteUser", {
-        method: "POST",
+        method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${session.accessToken}`, // Pass the session token
+          Authorization: `Bearer ${session.accessToken}`, // Pass the session token
         },
         body: JSON.stringify({ userId: id }),
       });
@@ -145,6 +157,7 @@ export default function ProfileSettings({ setShowSettings, profileSettings }) {
     } catch (error) {
       console.error("Failed to delete profile:", error);
       alert("Failed to delete profile. Please try again later.");
+      setIsDeleteProcessing(false);
     }
   };
   return (
@@ -160,16 +173,16 @@ export default function ProfileSettings({ setShowSettings, profileSettings }) {
         className="border-solid border-2 border-custom-main-dark rounded-lg backdrop-blur-md "
       >
         <div className="bg-custom-main-dark rounded-t-lg p-3">
-          <h1 className="text-black text-2xl font-bold">Edit Profile</h1>
+          <h1 className="text-white text-2xl font-bold">Edit Profile</h1>
         </div>
         <div className="bg-white rounded-b-lg p-4">
           <div className="flex flex-col">
             <div className="flex justify-between items-center bg-orange-100 p-2 rounded-lg my-4">
               <div className="flex justify-center items-center">
                 {/* Allow user to click on profile pic to select a new image */}
-                <label htmlFor="profilePic" className="cursor-pointer">
+                <label htmlFor="pfpUrl" className="cursor-pointer">
                   <Image
-                    src={previewUrl || profilePic || defaultPfp}
+                    src={previewUrl || pfpUrl || defaultPfp}
                     alt="Profile Picture"
                     className="rounded-full w-16 h-16"
                     width={100}
@@ -178,18 +191,18 @@ export default function ProfileSettings({ setShowSettings, profileSettings }) {
                 </label>
                 <input
                   type="file"
-                  id="profilePic"
+                  id="pfpUrl"
                   accept="image/*"
                   className="hidden"
                   onChange={handleFileChange}
                 />
                 <div className="mx-3 px-1 font-bold text-xl border-solid border border-[#A3A3A3] rounded-xl">
-                  {userName}
+                  {username}
                 </div>
               </div>
               <button
-                className="ml-12 bg-custom-main-dark bg-opacity-100 hover:bg-opacity-70 transition-colors ease-linear p-2 rounded-xl font-semibold"
-                onClick={() => document.getElementById("profilePic").click()}
+                className="ml-12 bg-custom-main-dark bg-opacity-100 text-white hover:bg-opacity-70 transition-colors ease-linear p-2 rounded-xl font-semibold"
+                onClick={() => document.getElementById("pfpUrl").click()}
               >
                 Change Photo
               </button>
@@ -199,7 +212,7 @@ export default function ProfileSettings({ setShowSettings, profileSettings }) {
               maxLength="150"
               type="text"
               defaultValue={updatedBio}
-              className="border-solid border-2 border-custom-main-dark p-2 pb-16 rounded-lg mb-4"
+              className="border border-[#A2A2A2] p-2 pb-16 rounded-lg mb-4 focus:outline-none focus:border-custom-main-dark"
               onChange={(e) => setUpdatedBio(e.target.value)}
             />
           </div>
@@ -211,14 +224,16 @@ export default function ProfileSettings({ setShowSettings, profileSettings }) {
               Log Out
             </button>
             <button
-              className="bg-custom-main-dark bg-opacity-100 hover:bg-opacity-70 transition-colors ease-linear p-2 px-8 ml-40 mt-4 mb-2 rounded-xl font-semibold"
+              className="bg-custom-main-dark bg-opacity-100 hover:bg-opacity-70 text-white transition-colors ease-linear p-2 px-8 ml-60 mt-4 mb-2 rounded-xl font-semibold"
               onClick={handleConfirmClick}
+              disabled={isConfirmProcessing}
             >
               Confirm
             </button>
             <button
-              className="bg-custom-main-dark bg-opacity-100 hover:bg-opacity-70 transition-colors ease-linear p-2 px-5 ml-5 mt-4 mb-2 rounded-xl font-semibold"
+              className="bg-opacity-100 hover:bg-opacity-70 bg-red-500 text-white transition-colors ease-linear p-2 px-5 ml-5 mt-4 mb-2 rounded-xl font-semibold"
               onClick={handleDeleteProfile}
+              disabled={isDeleteProcessing}
             >
               Delete Profile
             </button>
@@ -228,60 +243,3 @@ export default function ProfileSettings({ setShowSettings, profileSettings }) {
     </div>
   );
 }
-
-// const [statusMessage, setStatusMessage] = useState("");
-// const [loading, setLoading] = useState(false);
-// const handleSubmit = async (e) => {
-//   e.preventDefault();
-//   setLoading(true);
-//   try {
-//     let fileId = undefined;
-//     if (file) {
-//       setStatusMessage("Uploading...");
-//       fileId = await handleFileUpload(file);
-//     }
-
-//     setStatusMessage("Updating profile...");
-
-//    // update bio here is needed
-//
-//     setStatusMessage("Update Successful");
-//   } catch (error) {
-//     console.error(error);
-//     setStatusMessage("Post failed");
-//   } finally {
-//     setLoading(false);
-//   }
-// };
-
-// const computeSHA256 = async (file) => {
-//   const buffer = await file.arrayBuffer();
-//   const hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
-//   const hashArray = Array.from(new Uint8Array(hashBuffer));
-//   const hashHex = hashArray
-//     .map((b) => b.toString(16).padStart(2, "0"))
-//     .join("");
-//   return hashHex;
-// };
-
-// const handleImageUpload = async (file) => {
-//   const signedURLResult = await getSignedURL({
-//     fileSize: file.size,
-//     fileType: file.type,
-//     checksum: await computeSHA256(file),
-//   });
-//   if (signedURLResult.failure !== undefined) {
-//     throw new Error(signedURLResult.failure);
-//   }
-//   const { url, id: fileId } = signedURLResult.success;
-//   await fetch(url, {
-//     method: "PUT",
-//     headers: {
-//       "Content-Type": file.type,
-//     },
-//     body: file,
-//   });
-
-//   // const fileUrl = url.split("?")[0];
-//   return fileId;
-// };

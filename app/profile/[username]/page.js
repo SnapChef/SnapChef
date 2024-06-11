@@ -2,31 +2,21 @@ import NotFoundPage from "@/app/not-found";
 import Profile from "./components/profile";
 import ProfilePosts from "./components/profilePosts";
 import Link from "next/link";
-import { fetchProfile } from "@/constants";
+import { fetchProfile } from "@/actions/fetches";
 
 export default async function ProfilePage({ params }) {
   const { username } = params;
   const profile = await fetchProfile(username);
 
-  if (!profile) {
+  if (!profile || profile == null || profile == undefined || profile.error) {
     return <NotFoundPage />;
   }
 
   return (
-    <div className="h-[85vh]">
-      <Profile
-        profile={{
-          id: profile?.user?.id,
-          userName: profile?.user?.username,
-          postCount: profile?.user?.postCount,
-          followerCount: profile?.user?.followerCount,
-          followingCount: profile?.user?.followingCount,
-          bio: profile?.user?.bio,
-          imageURL: profile?.user?.pfpUrl,
-        }}
-      />
+    <div>
+      <Profile profile={profile} />
       {profile?.user?.postCount > 0 ? (
-        <div className="grid gap-y-10 my-10 ml-96 mr-28 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-10 my-10 ml-96 mr-28 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
           {profile.posts.map((post) => (
             <Link
               key={post._id}

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import SignInModal from "../../../signin/components/signInModal";
+import moment from 'moment';
 
 export default function CommentBox({ recipeId }) {
   const { data: session } = useSession();
@@ -38,6 +39,7 @@ export default function CommentBox({ recipeId }) {
           recipe_id: recipeId,
           user_name: session.user?.name,
           text: commentText,
+          time_sent: moment().format('M/D/YYYY [at] h:mmA'),
         }),
       });
 
@@ -48,9 +50,6 @@ export default function CommentBox({ recipeId }) {
       const responseData = await createCommentResponse.json();
       console.log(responseData);
 
-      // redirect to page once comment is submitted
-      router.push(`/recipes/${recipeId}`);
-
       // clear comment box after submission
       setCommentText("");
     } catch (error) {
@@ -59,7 +58,7 @@ export default function CommentBox({ recipeId }) {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 shadow-md rounded-md my-6 border-4 border-[#575A65]">
+    <div className="max-w-4xl mx-auto p-6 shadow-md rounded-md my-6">
       <form onSubmit={handleSubmit} className="mb-4">
         <textarea
           name="text"
@@ -68,14 +67,14 @@ export default function CommentBox({ recipeId }) {
           onChange={handleInputChange}
           placeholder="Write your comment here..."
           rows={3}
-          className="border border-gray-300 p-2 rounded-md w-full focus:outline-none focus:border-custom-main-dark"
+          className="p-2 rounded-md w-full focus:outline-none focus:border-custom-main-dark border"
           required
         />
         <button
           type="submit"
           className="bg-custom-main-dark px-4 py-2 rounded-lg text-white hover:bg-opacity-70 transition-all ease-linear mt-2"
         >
-          Submit Comment
+          Add Comment
         </button>
       </form>
       {showModal && <SignInModal onClose={() => setShowModal(false)} />}

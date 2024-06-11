@@ -6,6 +6,17 @@ export async function PATCH(req) {
   try {
     const { user_id, target_user_id } = await req.json();
 
+    if (!user_id || !target_user_id) {
+      return NextResponse.error(
+        new Error("Missing user_id or target_user_id"),
+        400
+      );
+    }
+
+    if (user_id === target_user_id) {
+      return NextResponse.error(new Error("Cannot follow yourself"), 400);
+    }
+
     await connectMongoDB();
 
     // Find and update both users atomically, including follower/following counts
@@ -13,7 +24,6 @@ export async function PATCH(req) {
       { _id: user_id },
       {
         $addToSet: { following: target_user_id },
-        $inc: { followingCount: 1 }, // Increment followingCount
       },
       { new: true }
     );
@@ -26,7 +36,6 @@ export async function PATCH(req) {
       { _id: target_user_id },
       {
         $addToSet: { followers: user_id },
-        $inc: { followerCount: 1 }, // Increment followerCount
       },
       { new: true }
     );
@@ -48,6 +57,17 @@ export async function DELETE(req) {
   try {
     const { user_id, target_user_id } = await req.json();
 
+    if (!user_id || !target_user_id) {
+      return NextResponse.error(
+        new Error("Missing user_id or target_user_id"),
+        400
+      );
+    }
+
+    if (user_id === target_user_id) {
+      return NextResponse.error(new Error("Cannot follow yourself"), 400);
+    }
+
     await connectMongoDB();
 
     // Find and update both users atomically, including follower/following counts
@@ -55,7 +75,6 @@ export async function DELETE(req) {
       { _id: user_id },
       {
         $pull: { following: target_user_id },
-        $inc: { followingCount: -1 }, // Decrement followingCount
       },
       { new: true }
     );
@@ -68,7 +87,6 @@ export async function DELETE(req) {
       { _id: target_user_id },
       {
         $pull: { followers: user_id },
-        $inc: { followerCount: -1 }, // Decrement followerCount
       },
       { new: true }
     );

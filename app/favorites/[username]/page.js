@@ -1,12 +1,17 @@
 import Post from "@/components/post";
-import { fetchFavRecipes } from "@/constants";
+import { fetchFavRecipes } from "@/actions/fetches";
+import NotFoundPage from "@/app/not-found";
 
 export default async function Favorites({ params }) {
   const { username } = params;
   const data = await fetchFavRecipes(username);
 
+  if (!data || data.error || data.message) {
+    return <NotFoundPage />;
+  }
+
   return (
-    <div className="h-screen">
+    <div>
       <h1 className="flex flex-col items-center justify-center text-4xl text-custom-main-dark font-sand font-semibold">
         Saved Recipes
       </h1>
