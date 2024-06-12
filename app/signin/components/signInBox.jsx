@@ -105,7 +105,7 @@ export default function SignInBox() {
                   initial={{ scale: 0 }}
                   animate={animateError && { scale: 1 }}
                   className={
-                    "flex w-64 bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md"
+                    "flex w-64 bg-red-500 text-white text-sm py-1 px-3 rounded-md"
                   }
                 >
                   {error}
