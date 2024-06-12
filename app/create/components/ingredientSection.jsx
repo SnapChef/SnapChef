@@ -1,41 +1,35 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-export default function IngredientSection({ formData, setFormData }) {
+const IngredientSection = ({ ingredients, setIngredients, formData, setFormData }) => {
+  const currentIngredients = ingredients || formData.ingredients;
+  const updateIngredients = setIngredients || ((newIngredients) => setFormData((prevFormData) => ({ ...prevFormData, ingredients: newIngredients })));
+
   const handleIngredientChange = (index, value) => {
-    const newIngredients = [...formData.ingredients];
+    const newIngredients = [...currentIngredients];
     newIngredients[index].name = value;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      ingredients: newIngredients,
-    }));
+    updateIngredients(newIngredients);
   };
 
   const addIngredient = () => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      ingredients: [...prevFormData.ingredients, { name: "" }],
-    }));
+    updateIngredients([...currentIngredients, { name: "" }]);
   };
 
   const removeIngredient = (index) => {
-    if (formData.ingredients.length === 1) {
-      return;
+    if (currentIngredients.length === 1) {
+      return; // Do not remove if it's the only ingredient
     }
-    const newIngredients = [...formData.ingredients];
+    const newIngredients = [...currentIngredients];
     newIngredients.splice(index, 1);
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      ingredients: newIngredients,
-    }));
+    updateIngredients(newIngredients);
   };
 
   return (
     <>
       <ul>
         <AnimatePresence>
-          {formData.ingredients.map((ingredient, index) => (
-            <motion.li 
+          {currentIngredients.map((ingredient, index) => (
+            <motion.li
               key={index}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
@@ -54,11 +48,11 @@ export default function IngredientSection({ formData, setFormData }) {
                   type="button"
                   onClick={() => removeIngredient(index)}
                   className={`ml-2 ${
-                    formData.ingredients.length === 1
+                    currentIngredients.length === 1
                       ? "bg-[#575A65] opacity-50 cursor-not-allowed"
                       : "bg-red-500"
                   } transition-colors ease-linear text-white px-4 py-2 rounded-md hover:bg-red-600`}
-                  disabled={formData.ingredients.length === 1}
+                  disabled={currentIngredients.length === 1}
                 >
                   Remove
                 </button>
@@ -76,4 +70,6 @@ export default function IngredientSection({ formData, setFormData }) {
       </button>
     </>
   );
-}
+};
+
+export default IngredientSection;

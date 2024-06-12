@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { fetchRecipe } from "@/actions/fetches.js";
 import StepSection from "@/app/create/components/stepsSection";
-//import IngredientSection from "@/app/create/components/ingredientSection";
+import IngredientSection from "@/app/create/components/ingredientSection";
 
 const EditRecipeModal = ({ recipeId, closeModal }) => {
   const [recipe, setRecipe] = useState(null);
@@ -35,6 +35,13 @@ const EditRecipeModal = ({ recipeId, closeModal }) => {
     setRecipe((prevRecipe) => ({
       ...prevRecipe,
       recipe_steps: updatedSteps,
+    }));
+  };
+
+  const handleIngredientChange = (updatedSteps) => {
+    setRecipe((prevRecipe) => ({
+      ...prevRecipe,
+      recipe_ingredients: updatedSteps,
     }));
   };
 
@@ -129,14 +136,20 @@ const EditRecipeModal = ({ recipeId, closeModal }) => {
               />
             </div>
 
-              {recipe.recipe_steps && (
-                <StepSection
-                  steps={recipe.recipe_steps}
-                  setSteps={handleStepChange}
-                />
-              )}
+            {recipe.recipe_steps && (
+              <StepSection
+                steps={recipe.recipe_steps}
+                setSteps={handleStepChange}
+              />
+            )}
 
-              {/* need to add inputs for ingredients, and attributes here */}
+            {recipe.recipe_ingredients && (
+              <IngredientSection
+                ingredients={recipe.recipe_ingredients}
+                setIngredients={handleIngredientChange}
+              />
+            )}
+
 
             <div className="flex justify-end space-x-4 mt-4">
               <button
