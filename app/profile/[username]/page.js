@@ -13,10 +13,10 @@ export default async function ProfilePage({ params }) {
   }
 
   return (
-    <div>
+    <div className="lg:flex lg:flex-col justify-center lg:justify-start">
       <Profile profile={profile} />
       {profile?.user?.postCount > 0 ? (
-        <div className="grid gap-10 my-10 ml-96 mr-28 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-10 my-10 lg:ml-[405px] md:ml-0 sm:ml-0 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 xl:mr-16">
           {profile.posts.map((post) => (
             <Link
               key={post._id}
@@ -34,7 +34,7 @@ export default async function ProfilePage({ params }) {
           ))}
         </div>
       ) : (
-        <div className="text-gray-500 flex items-center justify-center mt-36">
+        <div className="flex justify-center text-gray-500 mt-44">
           No posts yet.
         </div>
       )}
