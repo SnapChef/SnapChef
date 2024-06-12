@@ -1,5 +1,6 @@
 # Snapchef Installation
 - Go into VS Code and git clone ```https://github.com/SnapChef/SnapChef.git```
+- Go into the project dir ```cd SnapChef```
 - Run ```npm i```
 - create .env.local file in root dir and populate it w/ given env variables
 - Run ```npm run dev```
