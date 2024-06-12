@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { fetchRecipe } from "@/actions/fetches.js";
 import StepSection from "@/app/create/components/stepsSection";
 import IngredientSection from "@/app/create/components/ingredientSection";
+import AttributeSelector from "@/app/create/components/attributeSelector";
 
 const EditRecipeModal = ({ recipeId, closeModal }) => {
   const [recipe, setRecipe] = useState(null);
@@ -45,6 +46,13 @@ const EditRecipeModal = ({ recipeId, closeModal }) => {
     }));
   };
 
+  const handleAttributeChange = (updatedAttributes) => {
+    setRecipe((prevRecipe) => ({
+      ...prevRecipe,
+      recipe_attributes: updatedAttributes,
+    }));
+  };
+
   const handleEdit = (e) => {
     e.preventDefault();
     // edit post functionality here (i.e. findOneAndUpdate); WIP
@@ -54,8 +62,15 @@ const EditRecipeModal = ({ recipeId, closeModal }) => {
   const handleCloseModal = () => {
     if (closeModal) {
       closeModal();
+      document.body.classList.remove("modal-open");
     }
   };
+
+  useEffect(() => {
+    if (recipe) {
+      document.body.classList.add("modal-open"); 
+    }
+  }, [recipe]);
 
   if (error) {
     return <div>{error}</div>;
@@ -65,13 +80,13 @@ const EditRecipeModal = ({ recipeId, closeModal }) => {
   }
 
   return (
-    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-40 z-10">
+    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-40 z-10 p-14">
       <motion.div
         initial={{ opacity: 0, y: 100 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
         ref={modalRef}
-        className="border-solid border-2 border-custom-main-dark rounded-lg backdrop-blur-md"
+        className="border-solid border-2 border-custom-main-dark rounded-lg backdrop-blur-md max-h-full overflow-y-auto"
       >
         <div className="bg-custom-main-dark rounded-t-lg p-3">
           <h2 className="text-white text-xl font-bold">Edit Recipe</h2>
@@ -150,6 +165,13 @@ const EditRecipeModal = ({ recipeId, closeModal }) => {
               />
             )}
 
+            {recipe.recipe_attributes && (
+              <AttributeSelector
+                formData={recipe}
+                setFormData={handleAttributeChange}
+                initialAttributes={recipe.recipe_attributes}
+              />
+            )}
 
             <div className="flex justify-end space-x-4 mt-4">
               <button
