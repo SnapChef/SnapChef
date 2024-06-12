@@ -26,6 +26,7 @@ export default function SignInBox() {
       });
 
       if (res.error) {
+        console.log("error", res.error);
         setError("Invalid Credentials.");
         setAnimateError(true);
 
@@ -117,15 +118,18 @@ export default function SignInBox() {
                 Sign In
               </button>
               {/* removed Google sign-in for now */}
-              {/* <p className="text-gray-400 my-4"> or </p>
+              <p className="text-gray-400 my-4"> or </p>
               <div className="flex justify-center">
-                <a
-                  href="#"
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    signIn("google");
+                  }}
                   className="border-2 border-gray-400 rounded-full p-4 mx-1 transition-colors ease-linear hover:bg-custom-main-dark hover:text-white"
                 >
                   <FaGoogle className="text-sm" />
-                </a>
-              </div> */}
+                </button>
+              </div>
             </form>
           </div>
           {/* END OF: Sign In Section */}

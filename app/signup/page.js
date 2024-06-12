@@ -6,7 +6,7 @@ import { authOptions } from "../api/auth/[...nextauth]/route";
 export default async function SignUp() {
   const session = await getServerSession(authOptions);
 
-  if (session) redirect("/profile"); //temporarily redirect to profile; thinking to homepage with recipes instead
+  if (session) redirect("/home"); //temporarily redirect to profile; thinking to homepage with recipes instead
   return (
     <div className="my-40">
       <SignUpBox />
