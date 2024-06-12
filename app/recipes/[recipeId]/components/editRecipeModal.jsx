@@ -10,6 +10,8 @@ import AttributeSelector from "@/app/create/components/attributeSelector";
 const EditRecipeModal = ({ recipeId, closeModal }) => {
   const [recipe, setRecipe] = useState(null);
   const [error, setError] = useState(null);
+  const [isSaveProcessing, setIsSaveProcessing] = useState(false);
+  const [isDeleteProcessing, setIsDeleteProcessing] = useState(false);
   const modalRef = useRef();
 
   useEffect(() => {
@@ -58,6 +60,13 @@ const EditRecipeModal = ({ recipeId, closeModal }) => {
   const handleEdit = async (e) => {
     e.preventDefault();
   
+    const confirmSave = window.confirm(
+      "Would you like to confirm your changes?"
+    );
+    if (!confirmSave) return;
+
+    setIsSaveProcessing(true);
+
     try {
       const updateRecipeResponse = await fetch(`/api/updateRecipe`, {
         method: "PATCH",
@@ -80,11 +89,50 @@ const EditRecipeModal = ({ recipeId, closeModal }) => {
         throw new Error("Failed to update recipe");
       }
 
+      window.location.reload();
+
       if (closeModal) {
         closeModal();
       }
     } catch (error) {
       console.error("Error updating recipe:", error);
+    } finally {
+      setIsSaveProcessing(false);
+    }
+  };
+
+  const handleDeleteRecipe = async () => {
+    const confirmDelete = confirm(
+      "Are you sure you want to delete this recipe? This action cannot be undone."
+    );
+    if (!confirmDelete) return;
+
+    setIsDeleteProcessing(true);
+
+    try {
+      const res = await fetch("/api/deleteRecipe", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ recipeId }),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        alert("Failed to delete recipe: " + errorData.message);
+      } else {
+        const data = await res.json();
+        alert(data.message);
+        closeModal();
+
+        window.location.href = `/profile/${recipe.user_name}`;
+      }
+    } catch (error) {
+      console.error("Failed to delete recipe:", error);
+      alert("Failed to delete recipe. Please try again later.");
+    } finally {
+      setIsDeleteProcessing(false);
     }
   };
   
@@ -206,15 +254,23 @@ const EditRecipeModal = ({ recipeId, closeModal }) => {
               <button
                 type="button"
                 onClick={handleCloseModal}
-                className="bg-opacity-100 hover:bg-opacity-70 bg-red-500 transition-colors ease-linear text-white px-4 py-2 rounded-md"
+                className="bg-[#575A65] bg-opacity-60 hover:bg-opacity-100 transition-colors ease-linear text-white px-4 py-2 rounded-md"
               >
                 Cancel
               </button>
               <button
+                type="button"
+                onClick={handleDeleteRecipe}
+                className="bg-opacity-100 hover:bg-opacity-70 bg-red-500 transition-colors ease-linear text-white px-4 py-2 rounded-md"
+              >
+                {isDeleteProcessing ? "Deleting..." : "Delete Recipe"}
+              </button>
+              <button
                 type="submit"
                 className="bg-custom-main-dark bg-opacity-100 hover:bg-opacity-70 text-white transition-colors ease-linear px-4 py-2 rounded-md"
+                disabled={isSaveProcessing}
               >
-                Save Changes
+                {isSaveProcessing ? "Saving..." : "Save Changes"}
               </button>
             </div>
           </form>
