@@ -2,15 +2,13 @@
 
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import SignInModal from "../../../signin/components/signInModal";
-import moment from 'moment';
+import moment from "moment";
 
 export default function CommentBox({ recipeId }) {
   const { data: session } = useSession();
   const [commentText, setCommentText] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const router = useRouter();
 
   const handleInputChange = (e) => {
     setCommentText(e.target.value);

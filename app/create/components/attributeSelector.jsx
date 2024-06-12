@@ -1,29 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 const options = [
   { label: "Gluten Free", icon: "🌾", tag: "glutenFree" },
   { label: "High Protein", icon: "💪", tag: "highProtein" },
   { label: "Vegan", icon: "🌱", tag: "vegan" },
-  // add new options here
+  // Add other relevant options here
 ];
 
 export default function AttributeSelector({ formData, setFormData }) {
-  const [attributes, setAttributes] = useState([]);
-
-  useEffect(() => {
-    if (formData && formData.recipe_attributes && Array.isArray(formData.recipe_attributes)) {
-      setAttributes(formData.recipe_attributes);
-    }
-  }, [formData]);
-
   const handleOptionSelection = (selectedOption) => {
-    const updatedAttributes = attributes.includes(selectedOption)
-      ? attributes.filter((attr) => attr !== selectedOption)
-      : [...attributes, selectedOption];
-    setAttributes(updatedAttributes);
     setFormData((prevFormData) => ({
       ...prevFormData,
-      recipe_attributes: updatedAttributes,
+      attributes: selectedOption,
     }));
   };
 
@@ -36,8 +24,23 @@ export default function AttributeSelector({ formData, setFormData }) {
             <input
               type="checkbox"
               value={option.tag}
-              checked={attributes.includes(option.tag)}
-              onChange={(e) => handleOptionSelection(e.target.value)}
+              onChange={(e) => {
+                const isChecked = e.target.checked;
+                const selectedOption = e.target.value;
+
+                if (isChecked) {
+                  handleOptionSelection([
+                    ...formData.attributes,
+                    selectedOption,
+                  ]);
+                } else {
+                  handleOptionSelection(
+                    formData.attributes.filter(
+                      (attr) => attr !== selectedOption
+                    )
+                  );
+                }
+              }}
               className="form-checkbox"
             />
             <span className="text-lg">{option.icon}</span>

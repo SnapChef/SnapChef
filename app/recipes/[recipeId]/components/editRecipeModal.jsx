@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import { fetchRecipe } from "@/actions/fetches.js";
 import StepSection from "@/app/create/components/stepsSection";
 import IngredientSection from "@/app/create/components/ingredientSection";
+
+// removed temporarily
 import AttributeSelector from "@/app/create/components/attributeSelector";
 
 const EditRecipeModal = ({ recipeId, closeModal }) => {
@@ -20,10 +22,9 @@ const EditRecipeModal = ({ recipeId, closeModal }) => {
         setRecipe(recipe);
       }
     };
-
     fetchRecipeData();
-  }, [recipeId]);
-
+  }, [recipeId]); 
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setRecipe((prevRecipe) => ({
@@ -39,26 +40,54 @@ const EditRecipeModal = ({ recipeId, closeModal }) => {
     }));
   };
 
-  const handleIngredientChange = (updatedSteps) => {
+  const handleIngredientChange = (updatedIngredients) => {
     setRecipe((prevRecipe) => ({
       ...prevRecipe,
-      recipe_ingredients: updatedSteps,
+      recipe_ingredients: updatedIngredients,
     }));
   };
 
-  const handleAttributeChange = (updatedAttributes) => {
-    setRecipe((prevRecipe) => ({
-      ...prevRecipe,
-      recipe_attributes: updatedAttributes,
-    }));
-  };
+  // bring back when fixed
+  // const handleAttributeChange = (updatedAttributes) => {
+  //   setRecipe((prevRecipe) => ({
+  //     ...prevRecipe,
+  //     recipe_attributes: updatedAttributes,
+  //   }));
+  // };
 
-  const handleEdit = (e) => {
+  const handleEdit = async (e) => {
     e.preventDefault();
-    // edit post functionality here (i.e. findOneAndUpdate); WIP
-    // runs when "Save Changes" is clicked
-  };
+  
+    try {
+      const updateRecipeResponse = await fetch(`/api/updateRecipe`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          recipeId: recipe._id,
+          recipe_name: recipe.recipe_name,
+          recipe_time: recipe.recipe_time,
+          recipe_cals: recipe.recipe_cals,
+          recipe_description: recipe.recipe_description,
+          recipe_steps: recipe.recipe_steps,
+          recipe_ingredients: recipe.recipe_ingredients,
+          recipe_attributes: recipe.recipe_attributes,
+        }),
+      });
+  
+      if (!updateRecipeResponse.ok) {
+        throw new Error("Failed to update recipe");
+      }
 
+      if (closeModal) {
+        closeModal();
+      }
+    } catch (error) {
+      console.error("Error updating recipe:", error);
+    }
+  };
+  
   const handleCloseModal = () => {
     if (closeModal) {
       closeModal();
@@ -165,13 +194,13 @@ const EditRecipeModal = ({ recipeId, closeModal }) => {
               />
             )}
 
-            {recipe.recipe_attributes && (
+            {/* removed editing attributes until solution is found */}
+            {/* {recipe.recipe_attributes && (
               <AttributeSelector
                 formData={recipe}
                 setFormData={handleAttributeChange}
-                initialAttributes={recipe.recipe_attributes}
               />
-            )}
+            )} */}
 
             <div className="flex justify-end space-x-4 mt-4">
               <button
