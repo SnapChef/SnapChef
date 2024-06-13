@@ -115,8 +115,7 @@ function Navbar() {
   };
 
   return (
-    <nav className="flex items-center justify-between p-4 relative mr-10">
-      {/* Use the larger SnapChef.svg logo */}
+    <nav className="w-full flex items-center justify-between p-4 sm:mr-10">
       <Link href="/">
         <Image
           src={SnapChefLogo}
@@ -124,31 +123,29 @@ function Navbar() {
           className="cursor-pointer"
           width={300}
           height={300}
-          style={{ position: "relative", top: "0px" }} // Adjust the top value
         />
       </Link>
+
       {/* Display only the search field on the home and search page */}
       {(pathname === "/home" ||
         pathname.startsWith("/search/") ||
         pathname.startsWith("/filter/")) && (
-        <form onSubmit={handleSubmit} className="z-10">
-          <div className="fixed top-8 transform -translate-x-1/2">
-            <div className="relative">
-              <div className="absolute top-0 left-0 flex items-center m-2">
-                <Image src={Search} alt="Search" width={20} height={20} />
-              </div>
-              <Autosuggest
-                {...autosuggestProps}
-                inputProps={{
-                  type: "search",
-                  placeholder: "Search...",
-                  className:
-                    "w-full px-2 py-1 border-2 border-gray-300 rounded pl-8 xl:w-96",
-                  onChange: handleInputChange,
-                  value: searchTerm,
-                }}
-              />
+        <form onSubmit={handleSubmit} className="z-10 sm:mt-0">
+          <div className="relative">
+            <div className="absolute top-0 left-0 flex items-center m-2">
+              <Image src={Search} alt="Search" width={20} height={20} />
             </div>
+            <Autosuggest
+              {...autosuggestProps}
+              inputProps={{
+                type: "search",
+                placeholder: "Search...",
+                className:
+                  "w-full px-2 py-1 border-2 border-gray-300 rounded pl-8 xl:w-96",
+                onChange: handleInputChange,
+                value: searchTerm,
+              }}
+            />
           </div>
         </form>
       )}
