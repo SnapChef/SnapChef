@@ -16,13 +16,15 @@ export default function SortFilterDropdown() {
   };
 
   return (
-    <div className="px-12 flex justify-between">
+    <div className="px-12 flex justify-between sm:block hidden">
       <select
         className="block w-full py-2 px-1 border border-gray-300 bg-white rounded-md shadow-sm focus:border-custom-main-dark text-center"
         value={selectedAttribute}
         onChange={(e) => handleSelectAttribute(e.target.value)}
       >
-        <option className="text-center" value="">Sort</option>
+        <option className="text-center" value="">
+          Sort
+        </option>
         {attributes.map((attribute) => (
           <option key={attribute.value} value={attribute.value}>
             {attribute.label}
