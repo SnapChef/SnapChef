@@ -137,9 +137,9 @@ export default function CreatePost() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="max-w-xl mx-auto p-6 shadow-md rounded-md my-26"
+      className="max-w-xl mx-auto p-4 sm:p-6 my-6 shadow-md rounded-md"
     >
-      <h1 className="text-3xl font-semibold mb-4">Create New Post</h1>
+      <h1 className="text-3xl font-semibold mb-4 text-center">Create New Post</h1>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Recipe name section */}
@@ -155,13 +155,13 @@ export default function CreatePost() {
             required
             value={formData.recipe_name}
             onChange={handleInputChange}
-            className="border border-gray-300 p-2 rounded-md focus:outline-none focus:border-custom-main-dark"
+            className="border border-gray-300 p-2 rounded-md focus:outline-none focus:border-custom-main-dark w-full"
           />
         </div>
 
-        {/* Preperation section */}
-        <div className="flex space-x-4 justify-between">
-          <div className="flex flex-col">
+        {/* Preparation section */}
+        <div className="flex flex-col sm:flex-row sm:space-x-4 justify-between">
+          <div className="flex flex-col w-full sm:w-1/2 mb-4 sm:mb-0">
             <label className="text-sm font-medium mb-1" htmlFor="recipe_time">
               Preparation Time (min):
             </label>
@@ -173,12 +173,12 @@ export default function CreatePost() {
               required
               value={formData.recipe_time}
               onChange={handleInputChange}
-              className="border border-gray-300 p-2 rounded-md focus:outline-none focus:border-custom-main-dark"
+              className="border border-gray-300 p-2 rounded-md focus:outline-none focus:border-custom-main-dark w-full"
             />
           </div>
 
           {/* Calories section */}
-          <div className="flex flex-col">
+          <div className="flex flex-col w-full sm:w-1/2">
             <label className="text-sm font-medium mb-1" htmlFor="recipe_cals">
               Calories:
             </label>
@@ -190,17 +190,14 @@ export default function CreatePost() {
               required
               value={formData.recipe_cals}
               onChange={handleInputChange}
-              className="border border-gray-300 p-2 rounded-md focus:outline-none focus:border-custom-main-dark"
+              className="border border-gray-300 p-2 rounded-md focus:outline-none focus:border-custom-main-dark w-full"
             />
           </div>
         </div>
 
         {/* Short Description section */}
         <div className="flex flex-col">
-          <label
-            className="text-sm font-medium mb-1"
-            htmlFor="recipe_description"
-          >
+          <label className="text-sm font-medium mb-1" htmlFor="recipe_description">
             Description:
           </label>
           <textarea
@@ -210,7 +207,7 @@ export default function CreatePost() {
             required
             value={formData.recipe_description}
             onChange={handleInputChange}
-            className="border border-gray-300 p-2 rounded-md focus:outline-none focus:border-custom-main-dark"
+            className="border border-gray-300 p-2 rounded-md focus:outline-none focus:border-custom-main-dark w-full"
           />
         </div>
 

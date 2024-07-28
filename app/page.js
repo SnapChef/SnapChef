@@ -9,8 +9,8 @@ export default function LandingPage() {
   const { data: session } = useSession();
 
   return (
-    <main className="flex items-center justify-center h-screen p-4 md:ml-10">
-      <div className="flex flex-col items-center justify-center text-center space-y-6">
+    <main className="flex items-center justify-center my-28 sm:my-64 p-4">
+      <div className="flex flex-col items-center justify-center text-center">
         <motion.h1
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
