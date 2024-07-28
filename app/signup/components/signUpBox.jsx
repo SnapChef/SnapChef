@@ -114,25 +114,24 @@ export default function SignUpBox() {
       initial={{ opacity: 0, x: 400 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 1, ease: "easeOut" }}
-      className="mt-8"
     >
       {/* Sign Up Box */}
-      <main className="flex flex-col items-center justify-center">
-        <div className="flex flex-col items-center justify-center px-10 text-center rounded-2xl shadow-2xl max-w-xl">
-          <div className="w-4/5 p-5">
+      <main className="flex flex-col items-center justify-center w-full flex-1 px-4 md:px-10 text-center">
+        <div className="rounded-2xl shadow-2xl flex flex-col w-full md:w-3/4 max-w-3xl bg-white">
+          <div className="w-full p-5">
             <div className="py-10">
-              <h2 className="text-3xl font-bold text-custom-main-dark mb-2">
+              <h2 className="text-2xl md:text-3xl font-bold text-custom-main-dark mb-2">
                 Create Account
               </h2>
               <div className="border-2 w-10 border-custom-main-dark inline-block mb-2"></div>
-              <p className=" text-xs mb-2">Fill in your credentials below.</p>
+              <p className="text-xs mb-2">Fill in your credentials below.</p>
               <form
                 onSubmit={handleSubmit}
                 className="flex flex-col items-center"
               >
                 {/* Username */}
-                <h1 className="flex w-64 text-xs">Username</h1>
-                <div className="bg-gray-200 w-64 p-2 flex items-center m-2 rounded-2xl">
+                <h1 className="flex w-full md:w-64 text-xs">Username</h1>
+                <div className="bg-gray-200 w-full md:w-64 p-2 flex items-center m-2 rounded-2xl">
                   <FaRegUser className="text-gray-400 m-2" />
                   <input
                     onChange={(e) => setUsername(e.target.value)}
@@ -145,8 +144,8 @@ export default function SignUpBox() {
                 </div>
                 {/* END OF: Username */}
                 {/* Password */}
-                <h1 className="flex w-64 text-xs">Password</h1>
-                <div className="bg-gray-200 w-64 p-2 flex items-center m-2 rounded-2xl">
+                <h1 className="flex w-full md:w-64 text-xs">Password</h1>
+                <div className="bg-gray-200 w-full md:w-64 p-2 flex items-center m-2 rounded-2xl">
                   <RiLockPasswordLine className="text-gray-400 m-2" />
                   <input
                     onChange={(e) => setPassword(e.target.value)}
@@ -157,26 +156,26 @@ export default function SignUpBox() {
                                 outline-none text-sm flex-1"
                   />
                 </div>
-                <h1 className="flex w-64 text-xs">Confirm Password</h1>
-                <div className="bg-gray-200 w-64 p-2 flex items-center m-2 rounded-2xl">
+                <h1 className="flex w-full md:w-64 text-xs">Confirm Password</h1>
+                <div className="bg-gray-200 w-full md:w-64 p-2 flex items-center m-2 rounded-2xl">
                   <RiLockPasswordLine className="text-gray-400 m-2" />
                   <input
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     type="password"
                     name="password"
-                    placeholder="Enter password"
+                    placeholder="Confirm password"
                     className="border-2 bg-gray-200 
                                 outline-none text-sm flex-1"
                   />
                 </div>
                 {/* END OF: Password */}
                 {error && (
-                  <div className="flex w-64 bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2">
+                  <div className="flex w-full md:w-64 bg-red-500 text-white text-sm py-1 px-3 rounded-md mt-2">
                     {error}
                   </div>
                 )}
                 <button
-                  className="border-2 border-custom-main-dark text-custom-main-dark rounded-full px-12 py-2 mt-5 inline-block font-semibold
+                  className="border-2 border-custom-main-dark text-custom-main-dark rounded-full px-10 md:px-12 py-2 mt-5 inline-block font-semibold
                              transition-colors ease-linear hover:bg-custom-main-dark hover:text-white"
                 >
                   Sign Up

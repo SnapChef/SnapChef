@@ -162,23 +162,23 @@ export default function ProfileSettings({ setShowSettings, profileSettings }) {
   };
   return (
     <div
-      className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-40 m-auto max-w-10"
+      className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-40"
       onClick={handleClickOutside}
     >
       <motion.div
-        initial={{ opacity: 0, y: 100 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
         ref={settingsRef}
-        className="border-solid border-2 border-custom-main-dark rounded-lg backdrop-blur-md "
+        className="border-solid border-2 border-custom-main-dark rounded-lg backdrop-blur-md w-11/12 md:w-auto max-w-lg mx-4" // Adjusted for smaller screens
       >
         <div className="bg-custom-main-dark rounded-t-lg p-3">
-          <h1 className="text-white text-2xl font-bold">Edit Profile</h1>
+          <h1 className="text-white text-xl md:text-2xl font-bold">Edit Profile</h1>
         </div>
         <div className="bg-white rounded-b-lg p-4">
           <div className="flex flex-col">
             <div className="flex justify-between items-center bg-orange-100 p-2 rounded-lg my-4">
-              <div className="flex justify-center items-center">
+              <div className="flex items-center">
                 {/* Allow user to click on profile pic to select a new image */}
                 <label htmlFor="pfpUrl" className="cursor-pointer">
                   <Image
@@ -196,12 +196,12 @@ export default function ProfileSettings({ setShowSettings, profileSettings }) {
                   className="hidden"
                   onChange={handleFileChange}
                 />
-                <div className="mx-3 px-1 font-bold text-xl border-solid border border-[#A3A3A3] rounded-xl">
+                <div className="mx-3 px-1 font-bold text-lg md:text-xl border-solid border border-[#A3A3A3] rounded-xl">
                   {username}
                 </div>
               </div>
               <button
-                className="ml-12 bg-custom-main-dark bg-opacity-100 text-white hover:bg-opacity-70 transition-colors ease-linear p-2 rounded-xl font-semibold"
+                className="bg-custom-main-dark bg-opacity-100 text-white hover:bg-opacity-70 transition-colors ease-linear p-2 rounded-xl font-semibold"
                 onClick={() => document.getElementById("pfpUrl").click()}
               >
                 Change Photo
@@ -212,11 +212,11 @@ export default function ProfileSettings({ setShowSettings, profileSettings }) {
               maxLength="150"
               type="text"
               defaultValue={updatedBio}
-              className="border border-[#A2A2A2] p-2 pb-16 rounded-lg mb-4 focus:outline-none focus:border-custom-main-dark"
+              className="border border-[#A2A2A2] p-2 pb-16 rounded-lg mb-4 focus:outline-none focus:border-custom-main-dark w-full"
               onChange={(e) => setUpdatedBio(e.target.value)}
             />
           </div>
-          <div>
+          <div className="flex justify-between items-center">
             <button
               onClick={() => signOut()}
               className="bg-[#575A65] bg-opacity-60 hover:bg-opacity-100 transition-colors ease-linear px-4 py-2 rounded-lg text-white"
@@ -224,14 +224,14 @@ export default function ProfileSettings({ setShowSettings, profileSettings }) {
               Log Out
             </button>
             <button
-              className="bg-custom-main-dark bg-opacity-100 hover:bg-opacity-70 text-white transition-colors ease-linear p-2 px-8 ml-60 mt-4 mb-2 rounded-xl font-semibold"
+              className="bg-custom-main-dark bg-opacity-100 hover:bg-opacity-70 text-white transition-colors ease-linear p-2 px-8 ml-4 rounded-xl font-semibold"
               onClick={handleConfirmClick}
               disabled={isConfirmProcessing}
             >
               Confirm
             </button>
             <button
-              className="bg-opacity-100 hover:bg-opacity-70 bg-red-500 text-white transition-colors ease-linear p-2 px-5 ml-5 mt-4 mb-2 rounded-xl font-semibold"
+              className="bg-opacity-100 hover:bg-opacity-70 bg-red-500 text-white transition-colors ease-linear p-2 px-5 ml-4 rounded-xl font-semibold"
               onClick={handleDeleteProfile}
               disabled={isDeleteProcessing}
             >
