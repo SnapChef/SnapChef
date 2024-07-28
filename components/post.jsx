@@ -19,7 +19,7 @@ export default function Post({ post }) {
   } = post;
 
   const truncateText = (text) => {
-    return text.length > 44 ? text.slice(0, 44) + "..." : text; //reduced from 50 -> 44 to make images consistent with posts
+    return text.length > 42 ? text.slice(0, 42) + "..." : text;
   };
 
   return (

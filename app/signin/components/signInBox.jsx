@@ -48,13 +48,12 @@ export default function SignInBox() {
       initial={{ opacity: 0, x: -400 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 1, ease: "easeOut" }}
-      className="mt-8"
     >
-      <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
-        <div className="rounded-2xl shadow-2xl flex w-2/3 max-w-4xl">
+      <main className="flex flex-col items-center justify-center w-full flex-1 px-4 md:px-10 text-center">
+        <div className="rounded-2xl shadow-2xl flex flex-col md:flex-row w-full md:w-3/4 max-w-3xl">
           {/* Sign In Section */}
-          <div className="w-3/5 p-5">
-            <h2 className="text-3xl font-bold text-custom-main-dark mt-10 mb-2">
+          <div className="w-full md:w-3/5 p-5">
+            <h2 className="text-2xl md:text-3xl font-bold text-custom-main-dark mt-10 mb-2">
               Sign In
             </h2>
             <div className="border-2 w-10 border-custom-main-dark inline-block mb-2"></div>
@@ -63,8 +62,8 @@ export default function SignInBox() {
               className="flex flex-col items-center"
             >
               {/* Username */}
-              <h1 className="flex w-64 text-xs">Username</h1>
-              <div className="bg-gray-200 w-64 p-2 flex items-center m-2 rounded-2xl">
+              <h1 className="flex w-full md:w-64 text-xs">Username</h1>
+              <div className="bg-gray-200 w-full md:w-64 p-2 flex items-center m-2 rounded-2xl">
                 <FaRegUser className="text-gray-400 m-2" />
                 <input
                   onChange={(e) => setUsername(e.target.value)}
@@ -77,8 +76,8 @@ export default function SignInBox() {
               </div>
               {/* END OF: Username */}
               {/* Password */}
-              <h1 className="flex w-64 text-xs">Password</h1>
-              <div className="bg-gray-200 w-64 p-2 flex items-center m-2 rounded-2xl">
+              <h1 className="flex w-full md:w-64 text-xs">Password</h1>
+              <div className="bg-gray-200 w-full md:w-64 p-2 flex items-center m-2 rounded-2xl">
                 <RiLockPasswordLine className="text-gray-400 m-2" />
                 <input
                   onChange={(e) => setPassword(e.target.value)}
@@ -90,7 +89,7 @@ export default function SignInBox() {
                 />
               </div>
               {/* END OF: Password */}
-              <div className="flex w-64 mb-2 justify-between text-gray-600">
+              <div className="flex w-full md:w-64 mb-2 justify-between text-gray-600">
                 <label className="flex items-center text-xs">
                   <input type="checkbox" name="remember" className="mr-1" />{" "}
                   Remember Me
@@ -105,14 +104,14 @@ export default function SignInBox() {
                   initial={{ scale: 0 }}
                   animate={animateError && { scale: 1 }}
                   className={
-                    "flex w-64 bg-red-500 text-white text-sm py-1 px-3 rounded-md"
+                    "flex w-full md:w-64 bg-red-500 text-white text-sm py-1 px-3 rounded-md"
                   }
                 >
                   {error}
                 </motion.div>
               )}
               <button
-                className="border-2 border-custom-main-dark text-custom-main-dark rounded-full mt-2 px-12 py-2 inline-block font-semibold
+                className="border-2 border-custom-main-dark text-custom-main-dark rounded-full mt-2 px-10 md:px-12 py-2 inline-block font-semibold
                            transition-colors ease-linear hover:bg-custom-main-dark hover:text-white"
               >
                 Sign In
@@ -125,7 +124,7 @@ export default function SignInBox() {
                     e.preventDefault();
                     signIn("google");
                   }}
-                  className="border-2 border-gray-400 rounded-full p-4 mx-1 transition-colors ease-linear hover:bg-custom-main-dark hover:text-white"
+                  className="border-2 border-gray-400 rounded-full p-3 md:p-4 mx-1 transition-colors ease-linear hover:bg-custom-main-dark hover:text-white"
                 >
                   <FaGoogle className="text-sm" />
                 </button>
@@ -134,13 +133,13 @@ export default function SignInBox() {
           </div>
           {/* END OF: Sign In Section */}
           {/*Register Section */}
-          <div className="w-2/5 bg-custom-main-dark text-white rounded-tr-2xl rounded-br-2xl py-36 px-12">
-            <h2 className="text-3xl font-bold mb-2">Create Account</h2>
+          <div className="w-full md:w-2/5 bg-custom-main-dark text-white rounded-b-2xl md:rounded-tr-2xl md:rounded-br-2xl py-16 md:py-36 px-8 md:px-12">
+            <h2 className="text-2xl md:text-3xl font-bold mb-2">Create Account</h2>
             <div className="border-2 w-10 border-white inline-block mb-2"></div>
             <p className="mb-10">Start saving recipes today!</p>
             <Link
               href="/signup"
-              className="border-2 border-white rounded-full px-12 py-2 inline-block font-semibold transition-colors ease-linear 
+              className="border-2 border-white rounded-full px-8 md:px-12 py-2 inline-block font-semibold transition-colors ease-linear 
                     hover:bg-white hover:text-custom-main-dark"
             >
               Sign Up

@@ -22,8 +22,8 @@ export default async function RecipePage({ params }) {
   }
 
   return (
-    <div className="max-w-3xl mx-auto my-16">
-      <div className="flex justify-between items-center">
+    <div className="max-w-3xl mx-auto p-4">
+      <div className="flex flex-row justify-between items-center mb-4">
         <Link
           href={`/profile/${recipe.recipe.user_name}`}
           className="flex items-center mb-1 hover:underline hover:cursor-pointer hover:opacity-70"
@@ -51,9 +51,9 @@ export default async function RecipePage({ params }) {
       <img
         src={recipe.recipe.recipe_image}
         alt={recipe.recipe_name}
-        className="mb-3"
+        className="w-full h-auto mb-3 rounded-md"
       />
-      <div className="flex justify-between">
+      <div className="flex flex-row justify-between">
         <h1 className="text-3xl font-bold mb-4">{recipe.recipe.recipe_name}</h1>
         <div className="flex justify-between space-x-4">
           <Likes likeCount={likeCount} recipeId={recipe.recipe._id} />
@@ -66,12 +66,14 @@ export default async function RecipePage({ params }) {
         time={recipe.recipe.recipe_time}
         cals={recipe.recipe.recipe_cals}
       />
-      <div className="flex justify-between">
-        <div>
+      <div className="flex flex-col sm:flex-row justify-between space-y-4 sm:space-y-0">
+        <div className="w-full sm:w-2/3">
           <p className="my-4">{recipe.recipe.recipe_description}</p>
           <StepList steps={recipe.recipe.recipe_steps} />
         </div>
-        <IngredientList ingredients={recipe.recipe.recipe_ingredients} />
+        <div className="w-full sm:w-1/3">
+          <IngredientList ingredients={recipe.recipe.recipe_ingredients} />
+        </div>
       </div>
       <CommentSection recipeId={recipe.recipe._id} />
       <CommentBox recipeId={recipe.recipe._id} />

@@ -157,13 +157,13 @@ const EditRecipeModal = ({ recipeId, closeModal }) => {
   }
 
   return (
-    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-40 z-10 p-14">
+    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-40 z-10 p-4 sm:p-14">
       <motion.div
         initial={{ opacity: 0, y: 100 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
         ref={modalRef}
-        className="border-solid border-2 border-custom-main-dark rounded-lg backdrop-blur-md max-h-full overflow-y-auto"
+        className="border-solid border-2 border-custom-main-dark rounded-lg backdrop-blur-md max-h-full overflow-y-auto w-full max-w-2xl"
       >
         <div className="bg-custom-main-dark rounded-t-lg p-3">
           <h2 className="text-white text-xl font-bold">Edit Recipe</h2>
@@ -184,8 +184,8 @@ const EditRecipeModal = ({ recipeId, closeModal }) => {
                 className="border border-gray-300 p-2 rounded-md focus:outline-none focus:border-custom-main-dark"
               />
             </div>
-            <div className="flex space-x-4 justify-between">
-              <div className="flex flex-col">
+            <div className="flex flex-col sm:flex-row sm:space-x-4">
+              <div className="flex flex-col w-full sm:w-1/2 mb-4 sm:mb-0">
                 <label className="text-sm font-medium mb-1" htmlFor="recipe_time">
                   Preparation Time (min):
                 </label>
@@ -196,10 +196,10 @@ const EditRecipeModal = ({ recipeId, closeModal }) => {
                   required
                   value={recipe.recipe_time}
                   onChange={handleInputChange}
-                  className="border border-gray-300 p-2 rounded-md focus:outline-none focus:border-custom-main-dark"
+                  className="border border-gray-300 p-2 rounded-md focus:outline-none focus:border-custom-main-dark w-full"
                 />
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col w-full sm:w-1/2">
                 <label className="text-sm font-medium mb-1" htmlFor="recipe_cals">
                   Calories:
                 </label>
@@ -210,7 +210,7 @@ const EditRecipeModal = ({ recipeId, closeModal }) => {
                   required
                   value={recipe.recipe_cals}
                   onChange={handleInputChange}
-                  className="border border-gray-300 p-2 rounded-md focus:outline-none focus:border-custom-main-dark"
+                  className="border border-gray-300 p-2 rounded-md focus:outline-none focus:border-custom-main-dark w-full"
                 />
               </div>
             </div>
@@ -242,15 +242,7 @@ const EditRecipeModal = ({ recipeId, closeModal }) => {
               />
             )}
 
-            {/* removed editing attributes until solution is found */}
-            {/* {recipe.recipe_attributes && (
-              <AttributeSelector
-                formData={recipe}
-                setFormData={handleAttributeChange}
-              />
-            )} */}
-
-            <div className="flex justify-end space-x-4 mt-4">
+            <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-4 mt-4">
               <button
                 type="button"
                 onClick={handleCloseModal}

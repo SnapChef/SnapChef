@@ -51,7 +51,7 @@ const IngredientSection = ({ ingredients, setIngredients, formData, setFormData 
                     currentIngredients.length === 1
                       ? "bg-[#575A65] opacity-50 cursor-not-allowed"
                       : "bg-red-500"
-                  } transition-colors ease-linear text-white px-4 py-2 rounded-md hover:bg-red-600`}
+                  } transition-colors ease-linear text-white px-3 py-2 rounded-md hover:bg-red-600`}
                   disabled={currentIngredients.length === 1}
                 >
                   Remove

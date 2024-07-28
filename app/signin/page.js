@@ -8,7 +8,7 @@ export default async function SignIn() {
 
   if (session) redirect("/home"); //temporarily redirect to profile; thinking to homepage with recipes instead
   return (
-    <div className="my-40">
+    <div className="my-10">
       <SignInBox />
     </div>
   );

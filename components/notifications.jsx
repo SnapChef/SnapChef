@@ -16,13 +16,13 @@ export default function Notifications({ setShowNotifications }) {
 
   return (
     <div
-      className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-40 z-10"
+      className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-40 z-10 p-4"
       onClick={handleClickOutside}
     >
       <motion.div
-        initial={{ opacity: 0, y: 100 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
         ref={notifRef}
         className="border-solid border-2 border-custom-main-dark rounded-lg backdrop-blur-md"
       >
