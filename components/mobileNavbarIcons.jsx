@@ -1,4 +1,5 @@
 "use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -34,9 +35,14 @@ function MobileNavbarIcons() {
 
   const isLinkActive = (path) => path === activePath;
 
+  if (!session) {
+    return null;
+  }
+
   return (
     <>
-      <div className="block fixed bottom-0 sm:hidden bg-white p-4 w-full items-center">
+      <div className="sm:hidden" style={{ height: "60px" }} />
+      <div className="block fixed bottom-0 sm:hidden bg-white p-4 w-full items-center drop-shadow-2xl">
         <ul className="flex justify-between gap-8 list-none">
           <Link href="/home">
             <Image
@@ -71,7 +77,7 @@ function MobileNavbarIcons() {
                   ? FavFill
                   : Fav
               }
-              alt="Home"
+              alt="Favorites"
               className="nav-icon cursor-pointer"
               width={40}
               height={40}
@@ -84,7 +90,7 @@ function MobileNavbarIcons() {
                   ? ProfileFill
                   : Profile
               }
-              alt="Home"
+              alt="Profile"
               className="nav-icon cursor-pointer"
               width={40}
               height={40}
